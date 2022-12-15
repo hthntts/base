@@ -1,0 +1,20 @@
+#!/bin/bash
+# Description: Tmux config
+set -e
+
+function _tmux_config {
+    local file=$1
+    cat >${file} <<EOF
+set-option -g default-terminal "xterm-256color"
+EOF
+}
+
+local NAME=".tmux.conf"
+local FILE=${HOME}/${NAME}
+
+if [ -f ${FILE} ]; then
+    echo "[tmux] File ~/${NAME} found ... ${yellow}skipping${normal}"
+else
+    echo "[tmux] File ~/${NAME} not found"
+    _run "[tmux] Add config tmux ~/${NAME}" _tmux_config ${FILE}
+fi

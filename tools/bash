@@ -1,0 +1,41 @@
+#!/bin/bash
+# Description: Bash config
+set -e
+
+function _bash_aliases {
+    local file=$1
+    cat >${file} <<EOF
+alias ls="ls --color -h --group-directories-first"
+alias ll="ls --color -l -h --group-directories-first"
+alias lla="ll -a"
+EOF
+}
+
+function _bashrc_config {
+    local name=$1
+    cat >>~/.bashrc <<EOF
+
+# Bash custom config
+if [ -f ~/${name} ]; then
+    . ~/${name}
+fi
+EOF
+}
+
+local NAME=".bash_haiht"
+local FILE=${HOME}/${NAME}
+
+if [ -f ${FILE} ]; then
+    echo "[bash] File ~/${NAME} found ... ${yellow}skipping${normal}"
+else
+    echo "[bash] File ~/${NAME} not found"
+    _run "[bash] Add config alias ~/${NAME}" _bash_aliases ${FILE}
+fi
+
+if grep -q "${NAME}" "${HOME}/.bashrc"; then
+    echo "[bash] ~/${NAME} found on ~/.bashrc ... ${yellow}skipping${normal}"
+else
+    echo "[bash] ~/${NAME} not found on ~/.bashrc"
+    _run "[bash] Add config bashrc" _bashrc_config ${NAME}
+    RESTART_SHELL=1
+fi
