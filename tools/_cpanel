@@ -4,10 +4,10 @@ set -e
 
 function _check {
     if [ -z "$1" ]; then
-        echo "[check] $1 is not exists"
+        echo "[check] ${yellow}VARIABLE${normal} is not exists"
         exit 1
     else
-        echo "[check] $1 is already exists, skipping."
+        echo "[check] ${yellow}$1${normal} is already exists, skipping."
     fi
 }
 
