@@ -2,6 +2,10 @@
 # Description: cPanel get domain onwer
 set -e
 
+_tool _cpanel
+
+_check ${cP_DOMAIN}
+
 ACCOUNT=$(whmapi1 --output=jsonpretty getdomainowner domain=${cP_DOMAIN} | grep user | awk '{print $3}' | sed 's/"//g')
 
 _run "Domain: ${yellow}${cP_DOMAIN}${normal} - Owner: ${red}${ACCOUNT}${normal}"

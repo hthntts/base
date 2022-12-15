@@ -2,6 +2,10 @@
 # Description: cPanel email disk usage (account)
 set -e
 
+_tool _cpanel
+
+_check ${cP_DOMAIN}
+
 TEMPFILE="/tmp/${cP_DOMAIN}-${DAY}-email-disk-usage.txt"
 
 >${TEMPFILE}

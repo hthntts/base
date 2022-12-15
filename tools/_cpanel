@@ -2,6 +2,15 @@
 # Description: cPanel
 set -e
 
+function _check {
+    if [ -z "$1" ]; then
+        echo "[check] $1 is not exists"
+        exit 1
+    else
+        echo "[check] $1 is already exists, skipping."
+    fi
+}
+
 function _mkdir {
     if [ -e $1 ]; then
         echo "[mkdir] $1 is already exists, skipping."
