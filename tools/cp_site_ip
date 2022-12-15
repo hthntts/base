@@ -1,0 +1,8 @@
+#!/bin/bash
+# Description: cPanel change site ip all account
+set -e
+
+IP=$(cat /var/cpanel/mainip)
+for user in $(cat /etc/trueuserdomains | cut -d: -f2); do
+    /usr/local/cpanel/bin/setsiteip -u $user $IP
+done
