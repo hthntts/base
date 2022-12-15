@@ -10,6 +10,7 @@ trap 'exit' INT
 #     kill -0 "$$" || exit
 # done 2>/dev/null &
 
+DAY=$(date +%Y-%m-%d)
 _ROOT_PATH=$(dirname "$0")
 TOOL_PATH=$_ROOT_PATH/tools
 TOOLS=$(ls $TOOL_PATH | grep -v '^_' | sort)

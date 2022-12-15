@@ -1,0 +1,37 @@
+#!/bin/bash
+# Description: cPanel email disk usage (account)
+set -e
+
+TEMPFILE="/tmp/${cP_DOMAIN}-${DAY}-email-disk-usage.txt"
+
+>${TEMPFILE}
+
+sleep 3
+i=$(grep -E ^${cP_DOMAIN} /etc/userdomains | sed 's/://g' | awk '{print $2}')
+if [ -z $i ]; then
+    echo -e "Domain: ${yellow}${cP_DOMAIN} ${red}not found${normal}"
+    exit 1
+else
+    echo -e "Domain: ${yellow}${cP_DOMAIN} ${green}ok${normal}, please wait..."
+fi
+
+ls -d /home/$i/mail/${cP_DOMAIN}/*/ | awk 'BEGIN {
+}
+{
+tcmd = "test -d " $1
+if(!system(tcmd)){
+split($1,MyArray,"/")
+print MyArray[6] "@" MyArray[5]
+}
+}
+' | while read Email; do
+    Domain="$(echo "${Email}" | cut -d'@' -f2)"
+    Account="$(cat /etc/userdomains | grep "${Domain}" | cut -d' ' -f2)"
+    User="$(echo "${Email}" | cut -d'@' -f1)"
+    Diskused=$(
+        uapi --user=${Account} Email get_disk_usage user=${User} domain=${Domain} | grep diskused | awk '{print $2}' | sed "s/^'//;s/'$//"
+    )
+    echo -e "Domain: ${Domain} - User: ${Email} - Disk_used: ${Diskused} MB" >>${TEMPFILE}
+done
+
+cat ${TEMPFILE}
