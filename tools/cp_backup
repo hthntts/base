@@ -1,0 +1,18 @@
+#!/bin/bash
+# Description: cPanel backup
+set -e
+
+_tool _cpanel
+
+BKDIR="/backup"
+
+_mount ${BKDIR}
+_mkdir ${BKDIR}/${HOSTNAME}
+_mkdir ${BKDIR}/${HOSTNAME}/${DAY}
+
+for i in $(cat /etc/userdomains | awk {'print $2'}); do
+    _run "[backup] backup account $i" /scripts/pkgacct --backup --skiplogs $i ${BKDIR}/${HOSTNAME}/${DAY}
+done
+
+cd ${BKDIR}/${HOSTNAME}/
+_run "[backup] keep the last 3 backup" ls -lt | tail -n +6 | awk '{print $9}' | xargs rm -r

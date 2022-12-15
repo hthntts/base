@@ -1,3 +1,27 @@
 #!/bin/bash
 # Description: cPanel
 set -e
+
+function _mkdir {
+    if [ -e $1 ]; then
+        echo "[mkdir] $1 is already exists, skipping."
+    else
+        _run "[mkdir] Create directory $1" mkdir -p $1
+    fi
+}
+
+function _mount {
+    if grep -qs "$1" /proc/mounts; then
+        echo "[mount] $1 is already mounted, skipping."
+    else
+        echo "[mount] $1 is not mounted"
+        timeout 5s mount "$1"
+        if [ $? -eq 0 ]; then
+            echo "[mount] $1 is mount success!"
+        else
+            echo "[mount] something went wrong with the $1"
+            echo "[mount] stop script"
+            exit 1
+        fi
+    fi
+}
