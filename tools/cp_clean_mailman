@@ -1,0 +1,36 @@
+#!/bin/bash
+# Description: cPanel clean mailman
+set -e
+
+MAINMAN_PATH='/usr/local/cpanel/3rdparty/mailman/archives/private'
+
+for i in $(/usr/local/cpanel/3rdparty/mailman/bin/list_lists -b); do
+
+    # Check directory mailing list
+    if [ -d ${MAINMAN_PATH}/$i ]; then
+        _run "[mailman] rm -rf" rm -rf ${MAINMAN_PATH}/$i/*
+        echo -e "[mailman] mailing list $i found"
+    else
+        echo -e "[mailman] mailing list $i not found"
+    fi
+
+    # Check file mailing list MBOX
+    if [ -f ${MAINMAN_PATH}/$i'.mbox'/$i'.mbox' ]; then
+        echo -e "[mailman] mailing list MBOX $i found"
+        echo "" >${MAINMAN_PATH}/$i'.mbox'/$i'.mbox'
+    else
+        echo -e "[mailman] mailing list MBOX $i not found"
+        _run "[mailman] touch" touch ${MAINMAN_PATH}/$i'.mbox'/$i'.mbox'
+        _run "[mailman] chown -R mailman.mailman" chown -R mailman.mailman ${MAINMAN_PATH}/$i'.mbox'/$i'.mbox'
+    fi
+
+    _run "[mailman] Refresh mailing list $i" /usr/local/cpanel/3rdparty/mailman/bin/arch --wipe $i
+
+    # Permission mailing list
+    _run "[mailman] chown -R mailman.mailman" chown -R mailman.mailman ${MAINMAN_PATH}/$i
+    _run "[mailman] chown mailman.nobody" chown mailman.nobody ${MAINMAN_PATH}/$i
+    _run "[mailman] chmod 710" chmod 710 ${MAINMAN_PATH}/$i
+
+    _run "[mailman] update mailman cache" /scripts/update_mailman_cache
+done
+exit 0
