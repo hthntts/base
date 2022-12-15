@@ -35,11 +35,11 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
         -l | --list)
-            echo Available tools:
+            echo "    Available tools:"
             for tool in $TOOLS; do
                 description=$(grep '^# Description: ' "${TOOL_PATH}/$tool" |
                     cut -d' ' -f 3-)
-                printf "%15s   %s\n" "$tool" "$description"
+                printf "%20s   %s\n" "$tool" "$description"
             done
             exit
             ;;
@@ -49,6 +49,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         -r | --restart)
             RESTART_SHELL=1
+            shift
+            ;;
+        --domain=*)
+            cP_DOMAIN="${1#*=}"
             shift
             ;;
         -h | --help)
