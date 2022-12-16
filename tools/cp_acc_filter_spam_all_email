@@ -7,7 +7,7 @@ _tool _cpanel
 
 _domain ${cP_DOMAIN}
 
-i=$(grep -E ^${cP_DOMAIN} /etc/userdomains | sed 's/://g' | awk '{print $2}')
+i=$(grep -E ^${cP_DOMAIN}: /etc/userdomains | sed 's/://g' | awk '{print $2}')
 
 ls -d /home/$i/mail/${cP_DOMAIN}/*/ | awk 'BEGIN {
 }
