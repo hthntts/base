@@ -44,7 +44,7 @@ while [[ $# -gt 0 ]]; do
             for tool in $TOOLS; do
                 description=$(grep '^# Description: ' "${TOOL_PATH}/$tool" |
                     cut -d' ' -f 3-)
-                printf "%20s   %s\n" "$tool" "$description"
+                printf "%30s   %s\n" "$tool" "$description"
             done
             exit
             ;;

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Description: cPanel config fiter [SPAM] to Junk all email (account)
+# Description: cPanel config fiter [SPAM] to Junk email
 set -e
 
 _tool _cpanel
