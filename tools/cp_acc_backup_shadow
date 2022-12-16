@@ -1,6 +1,6 @@
 #!/bin/bash
 # Description: cPanel Account Backup Shadow
-# Arguments:
+# Arguments: --domain=cP_DOMAIN
 set -e
 
 _tool _cpanel
