@@ -14,6 +14,7 @@ DAY=$(date +%Y-%m-%d)
 _DAY=$(date +%Y%m%d)
 TIME=$(date +%H-%M-%S)
 _TIME=$(date +%H%M%S)
+TEMPTEMP="${_DAY}${_TIME}"
 _ROOT_PATH=$(dirname "$0")
 TOOL_PATH=$_ROOT_PATH/tools
 TOOLS=$(ls $TOOL_PATH | grep -v '^_' | sort)

@@ -6,7 +6,7 @@ _tool _cpanel
 
 _check ${cP_DOMAIN}
 
-TEMPFILE="/tmp/${cP_DOMAIN}-${DAY}-email-disk-usage.txt"
+TEMPFILE="/tmp/${cP_DOMAIN}-${TEMPTEMP}-email-disk-usage.txt"
 
 >${TEMPFILE}
 

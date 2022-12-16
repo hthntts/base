@@ -1,0 +1,20 @@
+#!/bin/bash
+# Description: cPanel fix quota not found
+set -e
+
+TEMPACCOUNT="/tmp/${TEMPTEMP}-account"
+TEMPACCOUNTQUOTA="/tmp/${TEMPTEMP}-account-quota"
+TEMPACCOUNTQUOTANOTFOUND="/tmp/${TEMPTEMP}-account-quota-not-found"
+
+ls /home/*/etc/*/quota | cut -d'/' -f3 | sort -n >${TEMPACCOUNTQUOTA}
+cat /etc/userdomains | awk '{print $2}' | sort -n | sed '/nobody/d' >${TEMPACCOUNT}
+diff -u ${TEMPACCOUNTQUOTA} ${TEMPACCOUNT} | grep -E '^\+' | sed 's/^+//g' | sed '1d' >${TEMPACCOUNTQUOTANOTFOUND}
+
+while IFS= read -r line; do
+    echo -n "[fix] quota ${yellow}$line${normal}"
+    domain=$(cat /etc/userdomains | grep $line | cut -d: -f1)
+    touch /home/$line/etc/$domain/quota
+    echo -n " ... "
+    chown $line.mail /home/$line/etc/$domain/quota
+    echo "${green}done${normal}"
+done <${TEMPACCOUNTQUOTANOTFOUND}
