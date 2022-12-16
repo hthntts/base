@@ -1,0 +1,13 @@
+#!/bin/bash
+# Description: cPanel check DKIM
+set -e
+
+_tool _cpanel
+
+TEMPDKIM="/tmp/${TEMPTEMP}-DKIM.txt"
+sed "s|:||g" /etc/userdomains | awk '!/^\* nobody/{print $1, $2 | "sort | uniq" }' >${TEMPDKIM}
+while read domain account; do
+    STATUS=$(whmapi1 --output=jsonpretty validate_current_dkims domain=$domain | jq '.data.payload | .[].state')
+    _run "[dkim] $domain - $STATUS" echo $domain - $STATUS
+done <${TEMPDKIM}
+exit 1
