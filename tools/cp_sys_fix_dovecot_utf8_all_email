@@ -1,5 +1,6 @@
 #!/bin/bash
-# Description: cPanel dovecot fix utf8 all email
+# Description: cPanel System Fix Dovecot UTF-8 All Email
+# Arguments:
 set -e
 
 _tool _cpanel

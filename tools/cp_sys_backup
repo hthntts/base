@@ -1,5 +1,6 @@
 #!/bin/bash
-# Description: cPanel backup
+# Description: cPanel System Backup
+# Arguments:
 set -e
 
 _tool _cpanel

@@ -1,5 +1,6 @@
 #!/bin/bash
-# Description: cPanel email change pass all (account)
+# Description: cPanel Account Change Pass All Email
+# Arguments: --domain=cP_DOMAIN
 set -e
 
 _tool _cpanel

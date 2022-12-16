@@ -1,5 +1,6 @@
 #!/bin/bash
-# Description: cPanel change site ip all account
+# Description: cPanel System Set Site IP
+# Arguments:
 set -e
 
 IP=$(cat /var/cpanel/mainip)

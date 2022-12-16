@@ -1,5 +1,6 @@
 #!/bin/bash
-# Description: cPanel clone server
+# Description: cPanel System Clone Server
+# Arguments:
 set -e
 
 _tool _cpanel

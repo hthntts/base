@@ -1,5 +1,6 @@
 #!/bin/bash
-# Description: cPanel fix quota not found
+# Description: cPanel System Fix Quota
+# Arguments:
 set -e
 
 TEMPACCOUNT="/tmp/${TEMPTEMP}-account"

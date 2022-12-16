@@ -40,11 +40,11 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
         -l | --list)
-            echo "    Available tools:"
+            printf "%-45s %s %s\n" "-----Description-----" "-----Tools-----"
             for tool in $TOOLS; do
-                description=$(grep '^# Description: ' "${TOOL_PATH}/$tool" |
-                    cut -d' ' -f 3-)
-                printf "%30s   %s\n" "$tool" "$description"
+                description=$(grep '^# Description: ' "${TOOL_PATH}/$tool" | cut -d' ' -f 3-)
+                argument=$(grep '^# Arguments: ' "${TOOL_PATH}/$tool" | cut -d' ' -f 3-)
+                printf "%-45s %s %s\n" "$description" "$tool" "$argument"
             done
             exit
             ;;

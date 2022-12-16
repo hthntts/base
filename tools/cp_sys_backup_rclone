@@ -1,5 +1,6 @@
 #!/bin/bash
-# Description: cPanel backup to cloud (rclone)
+# Description: cPanel System Backup Rclone (OneDrive)
+# Arguments:
 set -e
 
 _tool _cpanel

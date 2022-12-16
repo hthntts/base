@@ -1,5 +1,5 @@
 #!/bin/bash
-# Description: Tmux config
+# Description: Terminal config TMUX
 set -e
 
 function _tmux_config {

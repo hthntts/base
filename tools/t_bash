@@ -1,5 +1,5 @@
 #!/bin/bash
-# Description: Bash config
+# Description: Terminal config BASH
 set -e
 
 function _bash_aliases {

@@ -1,5 +1,6 @@
 #!/bin/bash
-# Description: cPanel clean mailman
+# Description: cPanel System Clean Mailman
+# Arguments:
 set -e
 
 MAINMAN_PATH='/usr/local/cpanel/3rdparty/mailman/archives/private'

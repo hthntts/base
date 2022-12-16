@@ -1,5 +1,6 @@
 #!/bin/bash
-# Description: cPanel backup email shadow
+# Description: cPanel Account Backup Shadow
+# Arguments:
 set -e
 
 _tool _cpanel

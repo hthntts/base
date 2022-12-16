@@ -1,5 +1,5 @@
 #!/bin/bash
-# Description: Vim config
+# Description: Terminal config VIM
 set -e
 
 function _vim_config {

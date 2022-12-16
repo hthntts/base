@@ -1,5 +1,6 @@
 #!/bin/bash
-# Description: cPanel check SPAM
+# Description: cPanel System Check Spam
+# Arguments:
 set -e
 
 _tool _cpanel
