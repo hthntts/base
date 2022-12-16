@@ -5,6 +5,15 @@ set -e
 PASS=$(date +%s | sha256sum | base64 | head -c 18)
 ALIAS_NAME=$(hostname -a)
 
+function _noti {
+    curl \
+        -H prio:high \
+        -H title:"$2" \
+        -H tags:warning,skull \
+        -d "$3" \
+        https://noti.sunrisevnlog.xyz/$1
+}
+
 function _domain {
     i=$(grep -E ^$1: /etc/userdomains | sed 's/://g' | awk '{print $2}')
     if [ -z $i ]; then
