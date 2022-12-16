@@ -17,5 +17,6 @@ cat $TEMP.DOMAIN | while read domain; do
         IP=$(dig $MX +short | awk 'NR == 1 {print $1}')
     fi
     echo -e "$domain,$MX,$IP,$NS" >>${TEMPMX}
-    _run "[dns] file ${yellow}${TEMPMX}${normal}" cat $TEMPMX
 done
+
+_run "[dns] file ${yellow}${TEMPMX}${normal}" cat $TEMPMX
