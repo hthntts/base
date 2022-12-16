@@ -6,7 +6,7 @@ PASS=$(date +%s | sha256sum | base64 | head -c 18)
 ALIAS_NAME=$(hostname -a)
 
 function _domain {
-    i=$(grep -E ^$1 /etc/userdomains | sed 's/://g' | awk '{print $2}')
+    i=$(grep -E ^$1: /etc/userdomains | sed 's/://g' | awk '{print $2}')
     if [ -z $i ]; then
         echo "[domain] ${yellow}$1${normal} --> ${red}does not exist${normal}"
         exit 1
