@@ -1,0 +1,25 @@
+#!/bin/bash
+# Description: cPanel config fiter [SPAM] to Junk all email (account)
+set -e
+
+_tool _cpanel
+
+_domain ${cP_DOMAIN}
+
+i=$(grep -E ^$1 /etc/userdomains | sed 's/://g' | awk '{print $2}')
+
+ls -d /home/$i/mail/${cP_DOMAIN}/*/ | awk 'BEGIN {
+}
+{
+tcmd = "test -d " $1
+if(!system(tcmd)){
+split($1,MyArray,"/")
+print MyArray[6] "@" MyArray[5]
+}
+}
+' | while read Email; do
+    User="$(echo "${Email}" | cut -d'@' -f1)"
+    Domain="$(echo "${Email}" | cut -d'@' -f2)"
+    Account="$(cat /etc/userdomains | grep "${Domain}" | cut -d' ' -f2)"
+    _run "[filter] config move subject [SPAM] to Junk" uapi --user=$Account Email store_filter filtername="Move Subject [SPAM] to Junk" account=$Email action1=save dest1=$home/mail/$Domain/$User/.Junk part1=\$header_subject: match1=matches val1="^\[SPAM]" opt1=or
+done
