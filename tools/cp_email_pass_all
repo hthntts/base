@@ -15,7 +15,7 @@ TEMPEMAIL=${_DAY}${_TIME}
 >/tmp/pass
 
 PASSPATH=/home/${USER}/etc/${cP_DOMAIN}/shadow
-_run "[email] backup file shadow ${yellow}${PASSPATH}.${DAY}${normal}" cp ${PASSPATH}{,.${DAY}}
+_run "[email] backup file shadow ${yellow}${PASSPATH}.${_DAY}${normal}" cp ${PASSPATH}{,.${_DAY}}
 _run "[email] create email temp ${yellow}${TEMPEMAIL}@${cP_DOMAIN}${normal}" uapi --user=$USER Email add_pop email=${TEMPEMAIL} password=$PASS quota=0 domain=$cP_DOMAIN skip_update_db=1
 LISTUSER=$(cat /home/${USER}/etc/${cP_DOMAIN}/shadow | cut -d':' -f1 | sed '/${TEMPEMAIL}/d')
 for i in $(echo $LISTUSER); do
