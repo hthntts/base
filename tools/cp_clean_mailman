@@ -9,22 +9,22 @@ for i in $(/usr/local/cpanel/3rdparty/mailman/bin/list_lists -b); do
     # Check directory mailing list
     if [ -d ${MAINMAN_PATH}/$i ]; then
         _run "[mailman] rm -rf" rm -rf ${MAINMAN_PATH}/$i/*
-        echo -e "[mailman] mailing list $i found"
+        echo "[mailman] ${yellow}$i${normal} --> ${green}exist${normal}"
     else
-        echo -e "[mailman] mailing list $i not found"
+        echo "[mailman] ${yellow}$i${normal} --> ${red}does not exist${normal}"
     fi
 
     # Check file mailing list MBOX
     if [ -f ${MAINMAN_PATH}/$i'.mbox'/$i'.mbox' ]; then
-        echo -e "[mailman] mailing list MBOX $i found"
+        echo "[mailman] mailing list MBOX $i ${green}exist${normal}"
         echo "" >${MAINMAN_PATH}/$i'.mbox'/$i'.mbox'
     else
-        echo -e "[mailman] mailing list MBOX $i not found"
+        echo "[mailman] mailing list MBOX $i ${red}does not exist${normal}"
         _run "[mailman] touch" touch ${MAINMAN_PATH}/$i'.mbox'/$i'.mbox'
         _run "[mailman] chown -R mailman.mailman" chown -R mailman.mailman ${MAINMAN_PATH}/$i'.mbox'/$i'.mbox'
     fi
 
-    _run "[mailman] Refresh mailing list $i" /usr/local/cpanel/3rdparty/mailman/bin/arch --wipe $i
+    _run "[mailman] refresh mailing list $i" /usr/local/cpanel/3rdparty/mailman/bin/arch --wipe $i
 
     # Permission mailing list
     _run "[mailman] chown -R mailman.mailman" chown -R mailman.mailman ${MAINMAN_PATH}/$i

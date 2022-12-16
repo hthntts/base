@@ -11,13 +11,7 @@ TEMPFILE="/tmp/${cP_DOMAIN}-${DAY}-email-disk-usage.txt"
 >${TEMPFILE}
 
 sleep 3
-i=$(grep -E ^${cP_DOMAIN} /etc/userdomains | sed 's/://g' | awk '{print $2}')
-if [ -z $i ]; then
-    echo -e "Domain: ${yellow}${cP_DOMAIN} ${red}not found${normal}"
-    exit 1
-else
-    echo -e "Domain: ${yellow}${cP_DOMAIN} ${green}ok${normal}, please wait..."
-fi
+_domain ${cP_DOMAIN}
 
 ls -d /home/$i/mail/${cP_DOMAIN}/*/ | awk 'BEGIN {
 }
