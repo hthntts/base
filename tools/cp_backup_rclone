@@ -1,26 +1,25 @@
 #!/bin/bash
-# Description: cPanel backup
+# Description: cPanel backup to cloud (rclone)
 set -e
 
 _tool _cpanel
 
-ALIAS_NAME=$(hostname -a)
 DATEDETE=$(date --date='3 day ago' +%Y-%m-%d)
 BACKUP_DIR="/backup/$ALIAS_NAME/$DAY"
 SECONDS=0
 
 size=$(du -sh $BACKUP_DIR | awk '{ print $1}')
 
-echo "Preparing to copy backup on Server to OneDrive, please wait... "
+echo "[backup] preparing to copy backup on Server to OneDrive, please wait... "
 sleep 3
 /usr/bin/rclone copy $BACKUP_DIR "backup:Backup/cPanel/$ALIAS_NAME/$DAY" >>/var/log/rclone.log 2>&1 #Copy all folders
 echo -e "${green}done${normal}"
 
-echo "Preparing to clean up backup older than 3 day on OneDrive, please wait... "
+echo "[backup] preparing to clean up backup older than 3 day on OneDrive, please wait... "
 sleep 3
 /usr/bin/rclone delete "backup:Backup/cPanel/$ALIAS_NAME/$DATEDETE" >>/var/log/rclone.log 2>&1 #Remove all file on folders older than 3 day
 /usr/bin/rclone rmdirs "backup:Backup/cPanel/$ALIAS_NAME/$DATEDETE" >>/var/log/rclone.log 2>&1 #Remove all empty folders older than 3 day
 echo -e "${green}done${normal}"
 
 duration=$SECONDS
-echo "Total $size, $(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed." >>/var/log/rclone.log 2>&1
+echo "[backup] total $size, $(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed." >>/var/log/rclone.log 2>&1
