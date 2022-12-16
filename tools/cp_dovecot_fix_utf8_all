@@ -1,0 +1,15 @@
+#!/bin/bash
+# Description: cPanel dovecot fix utf8 all email
+set -e
+
+_tool _cpanel
+
+TEMPALLEMAIL=/tmp/${TEMPTEMP}-all-email.txt
+
+ls -all /home/*/mail/*/*/subscriptions | awk -F"/" '{ print $6,$5 }' | sed s/\ /\@/g >${TEMPALLEMAIL}
+while read list; do
+    echo $list
+    ./cp_dovecot_fix_utf8 $list
+done <${TEMPALLEMAIL}
+
+_run "[dovecot] ${yellow}${TEMPALLEMAIL}${normal}" cat ${TEMPALLEMAIL}

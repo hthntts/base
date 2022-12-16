@@ -60,6 +60,10 @@ while [[ $# -gt 0 ]]; do
             cP_DOMAIN="${1#*=}"
             shift
             ;;
+        --email=*)
+            cP_EMAIL="${1#*=}"
+            shift
+            ;;
         -h | --help)
             cat <<EOF
 Usage: $(basename $0) [OPTION]... [TOOL]...

@@ -1,0 +1,41 @@
+#!/bin/bash
+# Description: cPanel dovecot fix utf8 email
+set -e
+
+_tool _cpanel
+
+# if [ -z "$1" ]; then
+#     echo Usage: $0 {Email}
+#     exit 1
+# fi
+
+# cP_EMAIL=$1
+
+_check ${cP_EMAIL}
+
+User="$(echo "${cP_EMAIL}" | cut -d'@' -f1)"
+Domain="$(echo "${cP_EMAIL}" | cut -d'@' -f2)"
+Account="$(cat /etc/userdomains | grep "${Domain}" | cut -d' ' -f2)"
+DIR=/home/${Account}/mail/${Domain}/${User}
+
+if [ -d "${DIR}" ]; then
+    cd ${DIR}
+else
+    echo -e "[dovecot] folder email ${yellow}${cP_EMAIL}${normal} does not exist"
+    exit 1
+fi
+
+cat subscriptions | sed '/INBOX/d;/Sent/d;/Trash/d;/Drafts/d;/spam/d;/Archive/d;/Junk/d' >subscriptions.${TEMPTEMP}
+
+while read name; do
+    new_name="$(basename "${name}" | tr "&" "+" | tr "," "/" | iconv -f UTF-7 -t UTF-8)"
+    if [ "${name}" != "${new_name}" ]; then
+        [ ! -e "${new_name}" ] && mv -T ".${name}" ".${new_name}"
+        echo "[dovecot] ${name} was renamed to ${new_name}" || echo "[dovecot] ${name} wasn't renamed!"
+    fi
+done <subscriptions.${TEMPTEMP}
+
+cat subscriptions | tr "&" "+" | tr "," "/" | iconv -f UTF-7 -t UTF-8 >subscriptions.update
+cat subscriptions.update >subscriptions
+
+exit 0
