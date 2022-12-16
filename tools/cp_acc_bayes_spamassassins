@@ -36,7 +36,7 @@ fi
 ## Check file bayes_toks
 BAYES_TOKS=/home/$i/.spamassassin/bayes_toks
 if [ -f ${BAYES_TOKS} ]; then
-    _run "[spam] file ${yellow}${BAYES_TOKS}${normal} does not exist" rm -rf ${BAYES_TOKS}
+    _run "[spam] remove ${yellow}${BAYES_TOKS}${normal}" rm -rf ${BAYES_TOKS}
 else
     _run "[spam] file ${yellow}${BAYES_TOKS}${normal} does not exist" echo "file ${BAYES_TOKS} does not exist"
 fi
