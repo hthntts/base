@@ -1,5 +1,5 @@
 #!/bin/bash
-# Description: cPanel Account Disk Usage [All]
+# Description: cPanel Account Disk Usage [All] *
 # Arguments: --domain=cP_DOMAIN
 set -e
 
@@ -7,8 +7,8 @@ _tool _cpanel
 _domain ${cP_DOMAIN}
 ACCOUNT=${account}
 
-TEMP_DISK=/tmp/${cP_DOMAIN}-${TEMPTEMP}-account-disk-usage.txt
->${TEMP_DISK}
+TEMP_ACCOUNT_DISK_USAGE=/tmp/${cP_DOMAIN}-${TEMPTEMP}-account-disk-usage.txt
+>${TEMP_ACCOUNT_DISK_USAGE}
 
 ls -d /home/${ACCOUNT}/mail/${cP_DOMAIN}/*/ | awk 'BEGIN {
 }
@@ -26,7 +26,7 @@ print MyArray[6] "@" MyArray[5]
     Diskused=$(
         uapi --user=${Account} Email get_disk_usage user=${User} domain=${Domain} | grep diskused | awk '{print $2}' | sed "s/^'//;s/'$//"
     )
-    echo -e "Domain: ${Domain} - User: ${Email} - Disk_used: ${Diskused} MB" >>${TEMP_DISK}
+    echo -e "[domain] ${yellow}${Domain}${normal} - [user] ${yellow}${Email}${normal} - [disk_used] ${yellow}${Diskused}${normal} MB ${green}... done.${normal}" >>${TEMP_ACCOUNT_DISK_USAGE}
 done
 
-cat ${TEMP_DISK}
+cat ${TEMP_ACCOUNT_DISK_USAGE}
