@@ -5,26 +5,26 @@ set -e
 
 _tool _cpanel
 
-CPPATH='/usr/local/cpanel/base/unprotected/cpanel'
-GITPATH='https://raw.githubusercontent.com/longmikel/cPanel/master/Brand'
+CPPATH=/usr/local/cpanel/base/unprotected/cpanel
+GITPATH=https://raw.githubusercontent.com/longmikel/cPanel/master/Brand
 
 _check ${IP_OLD} # IP Old
 _check ${IP_NEW} # IP New
 _check ${HN_OLD} # Hostname Old
 _check ${HN_NEW} # Hostname New
 
-_run "[clone] Config hostname" hostnamectl set-hostname ${HN_NEW}
-_run "[clone] Config IP in file hosts" sed -i "s|${IP_OLD}|${IP_NEW}|g" /etc/hosts
-_run "[clone] Config hostname in file hosts" sed -i "s|${HN_OLD} proxx|${HN_NEW} ${ALIAS_NAME}|g" /etc/hosts
-_run "[clone] Config MainIP" sed -i "s|${IP_OLD}|${IP_NEW}|g" /var/cpanel/mainip
+_run "[clone] Config hostname." hostnamectl set-hostname ${HN_NEW}
+_run "[clone] Config IP in file hosts." sed -i "s|${IP_OLD}|${IP_NEW}|g" /etc/hosts
+_run "[clone] Config hostname in file hosts." sed -i "s|${HN_OLD} proxx|${HN_NEW} ${ALIAS_NAME}|g" /etc/hosts
+_run "[clone] Config MainIP." sed -i "s|${IP_OLD}|${IP_NEW}|g" /var/cpanel/mainip
 
-_run "[clone] Config IP in Basic Webhost" sed -i "s|${IP_OLD}|${IP_NEW}|g" /etc/wwwacct.conf
-_run "[clone] Config Hostname in Basic Webhost" sed -i "s|${HN_OLD}|${HN_NEW}|g" /etc/wwwacct.conf
-_run "[clone] Config IP for Apache" sed -i "s|${IP_OLD}|${IP_NEW}|g" /var/cpanel/conf/apache/primary_virtual_hosts.conf
-_run "[clone] Config Hostname for Apache" sed -i "s|${HN_OLD}|${HN_NEW}|g" /var/cpanel/conf/apache/primary_virtual_hosts.conf
-_run "[clone] Enable backup and config backup directory" whmapi1 backup_config_set backupenable=1 backupdir=%2Fbackup%2F${ALIAS_NAME}
+_run "[clone] Config IP in Basic Webhost." sed -i "s|${IP_OLD}|${IP_NEW}|g" /etc/wwwacct.conf
+_run "[clone] Config Hostname in Basic Webhost." sed -i "s|${HN_OLD}|${HN_NEW}|g" /etc/wwwacct.conf
+_run "[clone] Config IP for Apache." sed -i "s|${IP_OLD}|${IP_NEW}|g" /var/cpanel/conf/apache/primary_virtual_hosts.conf
+_run "[clone] Config Hostname for Apache." sed -i "s|${HN_OLD}|${HN_NEW}|g" /var/cpanel/conf/apache/primary_virtual_hosts.conf
+_run "[clone] Enable backup and config backup directory." whmapi1 backup_config_set backupenable=1 backupdir=%2Fbackup%2F${ALIAS_NAME}
 
-_run "[clone] Config CSS" curl ${GITPATH}/CSS/style_v2_optimized.css -o ${CPPATH}/style_v2_optimized.css
-_run "[clone] Config WHM Logo" curl ${GITPATH}/Images/whm-logo_white.svg -o ${CPPATH}/images/whm-logo_white.svg
-_run "[clone] Config cPanel Logo" curl ${GITPATH}/Images/cpanel-logo.svg -o ${CPPATH}/images/cpanel-logo.svg
-_run "[clone] Config Webmail Logo" curl ${GITPATH}/Images/webmail-logo.svg -o ${CPPATH}/images/webmail-logo.svg
+_run "[clone] Config CSS." curl ${GITPATH}/CSS/style_v2_optimized.css -o ${CPPATH}/style_v2_optimized.css
+_run "[clone] Config WHM Logo." curl ${GITPATH}/Images/whm-logo_white.svg -o ${CPPATH}/images/whm-logo_white.svg
+_run "[clone] Config cPanel Logo." curl ${GITPATH}/Images/cpanel-logo.svg -o ${CPPATH}/images/cpanel-logo.svg
+_run "[clone] Config Webmail Logo." curl ${GITPATH}/Images/webmail-logo.svg -o ${CPPATH}/images/webmail-logo.svg

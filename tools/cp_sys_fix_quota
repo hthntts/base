@@ -3,19 +3,19 @@
 # Arguments:
 set -e
 
-TEMPACCOUNT="/tmp/${TEMPTEMP}-account"
-TEMPACCOUNTQUOTA="/tmp/${TEMPTEMP}-account-quota"
-TEMPACCOUNTQUOTANOTFOUND="/tmp/${TEMPTEMP}-account-quota-not-found"
+TEMP_ACCOUNT=/tmp/${HOSTNAME}-${TEMPTEMP}-account
+TEMP_ACCOUNT_QUOTA=/tmp/${HOSTNAME}-${TEMPTEMP}-account-quota
+TEMP_ACCOUNT_QUOTA_NOT_FOUND=/tmp/${HOSTNAME}-${TEMPTEMP}-account-quota-not-found
 
-ls /home/*/etc/*/quota | cut -d'/' -f3 | sort -n >${TEMPACCOUNTQUOTA}
-cat /etc/userdomains | awk '{print $2}' | sort -n | sed '/nobody/d' >${TEMPACCOUNT}
-diff -u ${TEMPACCOUNTQUOTA} ${TEMPACCOUNT} | grep -E '^\+' | sed 's/^+//g' | sed '1d' >${TEMPACCOUNTQUOTANOTFOUND}
+ls /home/*/etc/*/quota | cut -d'/' -f3 | sort -n >${TEMP_ACCOUNT_QUOTA}
+cat /etc/userdomains | awk '{print $2}' | sort -n | sed '/nobody/d' >${TEMP_ACCOUNT}
+diff -u ${TEMP_ACCOUNT_QUOTA} ${TEMP_ACCOUNT} | grep -E '^\+' | sed 's/^+//g' | sed '1d' >${TEMP_ACCOUNT_QUOTA_NOT_FOUND}
 
 while IFS= read -r line; do
-    echo -n "[fix] quota ${yellow}$line${normal}"
+    echo -n "[fix] Quota ${yellow}$line${normal}."
     domain=$(cat /etc/userdomains | grep $line | cut -d: -f1)
     touch /home/$line/etc/$domain/quota
     echo -n " ... "
     chown $line.mail /home/$line/etc/$domain/quota
     echo "${green}done${normal}"
-done <${TEMPACCOUNTQUOTANOTFOUND}
+done <${TEMP_ACCOUNT_QUOTA_NOT_FOUND}

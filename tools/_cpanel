@@ -15,27 +15,28 @@ function _noti {
 }
 
 function _domain {
-    i=$(grep -E ^$1: /etc/userdomains | sed 's/://g' | awk '{print $2}')
-    if [ -z $i ]; then
-        echo "[domain] ${yellow}$1${normal} --> ${red}does not exist${normal}"
+    account=$(grep -E ^$1: /etc/userdomains | sed 's/://g' | awk '{print $2}')
+    # account=$(/scripts/whoowns $1)
+    if [ -z $account ]; then
+        echo "[domain] ${yellow}$1${normal} --> ${red}does not exist${normal}."
         exit 1
     else
-        echo "[domain] ${yellow}$1${normal} --> ${green}exist${normal}"
+        echo "[domain] ${yellow}$1${normal} --> ${green}exist${normal}."
     fi
 }
 
 function _check {
     if [ -z "$1" ]; then
-        echo "[check] ${yellow}VAR${normal} --> ${red}does not exist${normal}"
+        echo "[check] ${yellow}VAR${normal} --> ${red}does not exist${normal}."
         exit 1
     else
-        echo "[check] ${yellow}$1${normal} --> ${green}exist${normal}"
+        echo "[check] ${yellow}$1${normal} --> ${green}exist${normal}."
     fi
 }
 
 function _mkdir {
     if [ -e $1 ]; then
-        echo "[mkdir] ${yellow}$1${normal} --> ${green}exist${normal}"
+        echo "[mkdir] ${yellow}$1${normal} --> ${green}exist${normal}."
     else
         _run "[mkdir] create directory ${yellow}$1${normal}" mkdir -p $1
     fi
@@ -45,12 +46,12 @@ function _mount {
     if grep -qs "$1" /proc/mounts; then
         echo "[mount] ${yellow}$1${normal} is already mounted, skipping."
     else
-        echo "[mount] ${yellow}$1${normal} is not mounted"
+        echo "[mount] ${yellow}$1${normal} is not mounted."
         timeout 5s mount "$1"
         if [ $? -eq 0 ]; then
             echo "[mount] ${yellow}$1${normal} is mount success!"
         else
-            echo "[mount] something went wrong with the ${yellow}$1${normal}, stop script"
+            echo "[mount] something went wrong with the ${yellow}$1${normal}, stop script."
             exit 1
         fi
     fi

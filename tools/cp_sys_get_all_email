@@ -5,8 +5,8 @@ set -e
 
 _tool _cpanel
 
-TEMPEMAILALL=/tmp/${TEMPTEMP}-all-email-account.txt
->$TEMPEMAILALL
+TEMP_ALL_EMAIL=/tmp/${HOSTNAME}-${TEMPTEMP}-system-get-all-email-account.txt
+>$TEMP_ALL_EMAIL
 
 CP_ACCOUNTS=$(ls -1A /var/cpanel/users/)
 
@@ -16,12 +16,12 @@ for user in $(echo -n $CP_ACCOUNTS); do
         PASSWD_FILE="/home/$user/etc/$dom/passwd"
         if [ -f $PASSWD_FILE ] && [ -s $PASSWD_FILE ]; then
             for mail in $(cat $PASSWD_FILE | cut -d":" -f1); do
-                echo "$mail@$dom" >>${TEMPEMAILALL}
+                echo "$mail@$dom" >>${TEMP_ALL_EMAIL}
             done
         fi
     done
 done
 
-TOTAL_EMAIL=$(cat ${TEMPEMAILALL} | wc -l)
+TOTAL_EMAIL=$(cat ${TEMP_ALL_EMAIL} | wc -l)
 
-_run "[email] total email ${yellow}${TOTAL_EMAIL}${normal}" cat ${TEMPEMAILALL} | wc -l
+_run "[email] Total Email ${yellow}${TOTAL_EMAIL}${normal}." cat ${TEMP_ALL_EMAIL} | wc -l

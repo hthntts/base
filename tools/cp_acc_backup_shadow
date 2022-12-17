@@ -4,14 +4,9 @@
 set -e
 
 _tool _cpanel
+_domain ${cP_DOMAIN}
+ACCOUNT=${account}
 
-_check ${cP_DOMAIN}
+PATH_SHADOW=/home/${ACCOUNT}/etc/${cP_DOMAIN}/shadow
 
-USER=$(/scripts/whoowns ${cP_DOMAIN})
-
-_check ${USER}
-
-PASSPATH=/home/${USER}/etc/${cP_DOMAIN}/shadow
-
-_run "[shadow] backup" cp ${PASSPATH}{,.${TEMPTEMP}}
-_run "[shadow]" ls -al /home/${USER}/etc/${cP_DOMAIN}/ | grep "shadow"
+_run "[shadow] Backup File Shadow ${yellow}${PATH_SHADOW}.${TEMPEMAIL}${normal}." cp ${PATH_SHADOW}{,.${TEMPTEMP}}

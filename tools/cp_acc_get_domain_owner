@@ -4,9 +4,7 @@
 set -e
 
 _tool _cpanel
-
-_check ${cP_DOMAIN}
-
-ACCOUNT=$(whmapi1 --output=jsonpretty getdomainowner domain=${cP_DOMAIN} | grep user | awk '{print $3}' | sed 's/"//g')
+_domain ${cP_DOMAIN}
+ACCOUNT=${account}
 
 _run "[domain] ${yellow}${cP_DOMAIN}${normal} --> [owner] ${red}${ACCOUNT}${normal}"

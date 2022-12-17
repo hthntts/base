@@ -3,8 +3,6 @@
 # Arguments: --email=cP_EMAIL
 set -e
 
-_tool _cpanel
-
 # if [ -z "$1" ]; then
 #     echo Usage: $0 {Email}
 #     exit 1
@@ -12,17 +10,21 @@ _tool _cpanel
 
 # cP_EMAIL=$1
 
+_tool _cpanel
 _check ${cP_EMAIL}
 
 User="$(echo "${cP_EMAIL}" | cut -d'@' -f1)"
 Domain="$(echo "${cP_EMAIL}" | cut -d'@' -f2)"
-Account="$(cat /etc/userdomains | grep "${Domain}" | cut -d' ' -f2)"
-DIR=/home/${Account}/mail/${Domain}/${User}
+
+_domain ${Domain}
+ACCOUNT=${account}
+
+DIR=/home/${ACCOUNT}/mail/${Domain}/${User}
 
 if [ -d "${DIR}" ]; then
     cd ${DIR}
 else
-    echo -e "[dovecot] folder email ${yellow}${cP_EMAIL}${normal} does not exist"
+    echo -e "[dovecot] Folder Email ${yellow}${cP_EMAIL}${normal} does not exist."
     exit 1
 fi
 
@@ -32,7 +34,7 @@ while read name; do
     new_name="$(basename "${name}" | tr "&" "+" | tr "," "/" | iconv -f UTF-7 -t UTF-8)"
     if [ "${name}" != "${new_name}" ]; then
         [ ! -e "${new_name}" ] && mv -T ".${name}" ".${new_name}"
-        echo "[dovecot] ${name} was renamed to ${new_name}" || echo "[dovecot] ${name} wasn't renamed!"
+        echo "[dovecot] Folder ${yellow}${name}${normal} was renamed to ${yellow}${new_name}${normal}." || echo "[dovecot] ${yellow}${name}${normal} wasn't renamed!"
     fi
 done <subscriptions.${TEMPTEMP}
 
