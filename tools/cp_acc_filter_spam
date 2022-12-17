@@ -1,5 +1,5 @@
 #!/bin/bash
-# Description: cPanel Account Filter [SPAM] [All]
+# Description: cPanel Account Filter [SPAM] [All] *
 # Arguments: --domain=cP_DOMAIN
 set -e
 
@@ -20,5 +20,5 @@ print MyArray[6] "@" MyArray[5]
     User="$(echo "${Email}" | cut -d'@' -f1)"
     Domain="$(echo "${Email}" | cut -d'@' -f2)"
     Account="$(cat /etc/userdomains | grep "${Domain}" | cut -d' ' -f2)"
-    _run "[filter] Config Filter Email ${yellow}$Email${normal} Move Subject [SPAM] To Junk." uapi --user=$ACCOUNT Email store_filter filtername="Move Subject [SPAM] To Junk" account=$Email action1=save dest1=$home/mail/$Domain/$User/.Junk part1=\$header_subject: match1=matches val1="^\[SPAM]" opt1=or
+    _run "[filter] Config Filter Email ${yellow}$Email${normal} Move Subject [SPAM] To Junk" uapi --user=$ACCOUNT Email store_filter filtername="Move Subject [SPAM] To Junk" account=$Email action1=save dest1=$home/mail/$Domain/$User/.Junk part1=\$header_subject: match1=matches val1="^\[SPAM]" opt1=or
 done
