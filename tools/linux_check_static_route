@@ -1,0 +1,31 @@
+#!/bin/bash
+# Description: Linux Check Static Route
+# Arguments:
+set -e
+
+IP_GW=192.168.48.254
+
+PING_1=$(ping -c 5 192.168.49.254 | grep transmitted | awk '{print $4}')
+if [ $PING_1 -eq 0 ]; then
+    route add -net 192.168.49.0/24 gw ${IP_GW} eth1
+fi
+
+PING_2=$(ping -c 5 192.168.102.254 | grep transmitted | awk '{print $4}')
+if [ $PING_2 -eq 0 ]; then
+    route add -net 192.168.102.0/24 gw ${IP_GW} eth1
+fi
+
+PING_3=$(ping -c 5 192.168.113.254 | grep transmitted | awk '{print $4}')
+if [ $PING_3 -eq 0 ]; then
+    route add -net 192.168.113.0/24 gw ${IP_GW} eth1
+fi
+
+PING_4=$(ping -c 5 192.168.88.1 | grep transmitted | awk '{print $4}')
+if [ $PING_4 -eq 0 ]; then
+    route add -net 192.168.88.0/25 gw ${IP_GW} eth1
+fi
+
+PING_5=$(ping -c 5 192.168.88.129 | grep transmitted | awk '{print $4}')
+if [ $PING_5 -eq 0 ]; then
+    route add -net 192.168.88.128/25 gw ${IP_GW} eth1
+fi
