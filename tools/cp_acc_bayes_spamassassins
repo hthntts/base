@@ -1,5 +1,5 @@
 #!/bin/bash
-# Description: cPanel Account Bayes Spamassassins [All]
+# Description: cPanel Account Bayes Spamassassins [All] *
 # Arguments: --domain=cP_DOMAIN
 set -e
 
@@ -10,31 +10,28 @@ ACCOUNT=${account}
 # Force a database sync and expiry run
 _run "[spam] Force a database sync and expiry run" /usr/local/cpanel/3rdparty/bin/sa-learn --force-expire
 
-# Check and remove 3 file bayes_journal - bayes_seen - bayes_toks
-echo "[spam] Check and remove 3 file bayes_journal - bayes_seen - bayes_toks, please wait..."
-
 ## Check file bayes_journal
 BAYES_JOURNAL=/home/${ACCOUNT}/.spamassassin/bayes_journal
 if [ -f ${BAYES_JOURNAL} ]; then
-    _run "[spam] Remove ${yellow}${BAYES_JOURNAL}${normal}." rm -rf ${BAYES_JOURNAL}
+    _run "[spam] Remove ${yellow}${BAYES_JOURNAL}${normal}" rm -rf ${BAYES_JOURNAL}
 else
-    _run "[spam] File ${yellow}${BAYES_JOURNAL}${normal} does not exist." echo "file ${BAYES_JOURNAL} does not exist."
+    echo "[spam] File ${yellow}${BAYES_JOURNAL}${normal} ${red}does not exist${normal}."
 fi
 
 ## Check file bayes_seen
 BAYES_SEEN=/home/${ACCOUNT}/.spamassassin/bayes_seen
 if [ -f ${BAYES_SEEN} ]; then
-    _run "[spam] Remove ${yellow}${BAYES_SEEN}${normal}." rm -rf ${BAYES_SEEN}
+    _run "[spam] Remove ${yellow}${BAYES_SEEN}${normal}" rm -rf ${BAYES_SEEN}
 else
-    _run "[spam] File ${yellow}${BAYES_SEEN}${normal} does not exist." echo "file ${BAYES_SEEN} does not exist."
+    echo "[spam] File ${yellow}${BAYES_SEEN}${normal} ${red}does not exist${normal}."
 fi
 
 ## Check file bayes_toks
 BAYES_TOKS=/home/${ACCOUNT}/.spamassassin/bayes_toks
 if [ -f ${BAYES_TOKS} ]; then
-    _run "[spam] Remove ${yellow}${BAYES_TOKS}${normal}." rm -rf ${BAYES_TOKS}
+    _run "[spam] Remove ${yellow}${BAYES_TOKS}${normal}" rm -rf ${BAYES_TOKS}
 else
-    _run "[spam] File ${yellow}${BAYES_TOKS}${normal} does not exist." echo "file ${BAYES_TOKS} does not exist."
+    echo "[spam] File ${yellow}${BAYES_TOKS}${normal} ${red}does not exist${normal}."
 fi
 
 sleep 3
