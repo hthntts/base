@@ -6,9 +6,11 @@ set -e
 _tool _cpanel
 _domain ${cP_DOMAIN}
 
-TEMP_MEMBER_MAILMAN=/tmp/${HOSTNAME}-${TEMPTEMP}
+TEMP_MEMBER_MAILMAN=/tmp/${TEMPTEMP}
 
 for list in $(/usr/local/cpanel/3rdparty/mailman/bin/list_lists -b | grep ${cP_DOMAIN}); do
-    _run "[mailman] List ${yellow}$list${normal} --> ${yellow}${TEMP_MEMBER_MAILMAN}-$list.txt${normal}." /usr/local/cpanel/3rdparty/mailman/bin/list_members $list >${TEMP_MEMBER_MAILMAN}-$list.txt
+    echo "[mailman] ${yellow}$list${normal} --> ${yellow}${TEMP_MEMBER_MAILMAN}-$list.txt${normal}"
+    /usr/local/cpanel/3rdparty/mailman/bin/list_members $list >${TEMP_MEMBER_MAILMAN}-$list.txt
+    echo -e " ... ${green}done${normal}."
 done
 exit 0
