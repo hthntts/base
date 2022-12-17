@@ -1,5 +1,5 @@
 #!/bin/bash
-# Description: cPanel Account Get Member Mailman
+# Description: cPanel Account Get Member Mailman *
 # Arguments: --domain=cP_DOMAIN
 set -e
 
@@ -9,8 +9,8 @@ _domain ${cP_DOMAIN}
 TEMP_MEMBER_MAILMAN=/tmp/${TEMPTEMP}
 
 for list in $(/usr/local/cpanel/3rdparty/mailman/bin/list_lists -b | grep ${cP_DOMAIN}); do
-    echo "[mailman] ${yellow}$list${normal} --> ${yellow}${TEMP_MEMBER_MAILMAN}-$list.txt${normal}"
+    echo -n "[mailman] ${yellow}$list${normal} --> ${yellow}${TEMP_MEMBER_MAILMAN}-$list.txt${normal}"
     /usr/local/cpanel/3rdparty/mailman/bin/list_members $list >${TEMP_MEMBER_MAILMAN}-$list.txt
-    echo -e " ... ${green}done${normal}."
+    echo " ... ${green}done${normal}."
 done
 exit 0
