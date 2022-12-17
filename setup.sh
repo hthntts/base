@@ -123,7 +123,7 @@ function _tool {
     source "./${recipe}"
     popd >/dev/null
     unset 'STACK[${#STACK[@]}-1]'
-    echo "${dim}-- Tool [${STACK[@]}]${normal}"
+    # echo "${dim}-- Tool [${STACK[@]}]${normal}"
 
 }
 
