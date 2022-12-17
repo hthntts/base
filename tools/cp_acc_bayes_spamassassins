@@ -34,6 +34,5 @@ else
     echo "[spam] File ${yellow}${BAYES_TOKS}${normal} ${red}does not exist${normal}."
 fi
 
-sleep 3
-_run "[spam] Restart ${yellow}spamd${normal}" /scripts/restartsrv_spamd
+_restart spamd
 exit 0

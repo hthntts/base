@@ -42,6 +42,10 @@ function _mkdir {
     fi
 }
 
+function _restart {
+    _run "[spam] Restart ${yellow}$1${normal}" /scripts/restartsrv_$1
+}
+
 function _mount {
     if grep -qs "$1" /proc/mounts; then
         echo "[mount] ${yellow}$1${normal} is already mounted, skipping."
