@@ -1,0 +1,26 @@
+#!/bin/bash
+# Description: cPanel Account Fix Unlink [All]
+# Arguments: --domain=cP_DOMAIN
+set -e
+
+_tool _cpanel
+_domain ${cP_DOMAIN}
+ACCOUNT=${account}
+
+TEMP_UNLINK_ALLEMAIL_ACCOUNT=/tmp/${HOSTNAME}-${TEMPTEMP}-system-fix-unlink-all-email.txt
+
+ls -all /home/${ACCOUNT}/mail/ | awk '$9 ~ /@/' | awk '{print $9, $11;}' | cut -d'/' -f1 >${TEMP_UNLINK_ALLEMAIL_ACCOUNT}
+
+while read Email Domain; do
+    Account=$(/scripts/whoowns $1)
+    echo "[unlink] $Email - $Domain - $Account"
+    DIR=/home/${Account}/mail/
+
+    if [ -d "${DIR}" ]; then
+        cd ${DIR}
+        unlink $Email
+    else
+        _run "[unlink] ${yellow}${Email}${normal} does not exist." echo "[unlink] ${Email} does not exist."
+        exit 1
+    fi
+done <${TEMP_UNLINK_ALLEMAIL_ACCOUNT}
