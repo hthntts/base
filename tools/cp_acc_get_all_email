@@ -1,0 +1,15 @@
+#!/bin/bash
+# Description: cPanel Account Get All Email
+# Arguments: --domain=cP_DOMAIN
+set -e
+
+_tool _cpanel
+_domain ${cP_DOMAIN}
+ACCOUNT=${account}
+
+uapi --output=jsonpretty --user=${ACCOUNT} Email list_pops no_validate=0 skip_main=1 | jq -r '.result.data[].email'
+
+TOTAL_EMAIL_ACCOUNT=$(uapi --output=jsonpretty --user=${ACCOUNT} Email list_pops no_validate=0 skip_main=1 | jq -r '.result.data[].email' | wc -l)
+
+_run "[email] Total Mailbox: ${yellow}$TOTAL_EMAIL_ACCOUNT${normal}" echo $TOTAL_EMAIL_ACCOUNT
+exit 0
