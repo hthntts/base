@@ -1,0 +1,29 @@
+#!/bin/bash
+# Description: cPanel Account Fix Permission
+# Arguments: --domain=cP_DOMAIN
+set -e
+
+_tool _cpanel
+_domain ${cP_DOMAIN}
+ACCOUNT=${account}
+
+# ACCOUNT=$@
+
+for user in $ACCOUNT; do
+    HOMEDIR=$(egrep "^${user}:" /etc/passwd | cut -d: -f6)
+    if [ ! -f /var/cpanel/users/$user ]; then
+        echo "[permission] $user user file missing, likely an invalid user."
+    elif [ "$HOMEDIR" == "" ]; then
+        echo "[permission] Couldn't determine home directory for $user."
+    else
+        echo "[permission] Setting ownership for user $user."
+        chown -R $user:$user $HOMEDIR
+        chmod 711 $HOMEDIR
+        chown $user:nobody $HOMEDIR/public_html $HOMEDIR/.htpasswds
+        chown $user:mail $HOMEDIR/etc $HOMEDIR/etc/*/shadow $HOMEDIR/etc/*/passwd
+        echo "[permission] Setting permissions for user $ACCOUNT."
+        find $HOMEDIR -type f -exec chmod 644 {} \;
+        find $HOMEDIR -type d -exec chmod 755 {} \;
+        find $HOMEDIR -type d -name cgi-bin -exec chmod 755 {} \;
+    fi
+done
