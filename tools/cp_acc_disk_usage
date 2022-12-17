@@ -26,7 +26,7 @@ print MyArray[6] "@" MyArray[5]
     Diskused=$(
         uapi --user=${Account} Email get_disk_usage user=${User} domain=${Domain} | grep diskused | awk '{print $2}' | sed "s/^'//;s/'$//"
     )
-    echo -e "[domain] ${yellow}${Domain}${normal} - [user] ${yellow}${Email}${normal} - [disk_used] ${yellow}${Diskused}${normal} MB ${green}... done.${normal}" >>${TEMP_ACCOUNT_DISK_USAGE}
+    echo -e "[domain] ${yellow}${Domain}${normal} - [email] ${yellow}${Email}${normal} - [disk_used] ${yellow}${Diskused}${normal} MB ${green}... done.${normal}" >>${TEMP_ACCOUNT_DISK_USAGE}
 done
 
-cat ${TEMP_ACCOUNT_DISK_USAGE}
+_run "[domain] File ${TEMP_ACCOUNT_DISK_USAGE}" cat ${TEMP_ACCOUNT_DISK_USAGE}
