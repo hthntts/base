@@ -7,7 +7,8 @@ _tool _cpanel
 _domain ${cP_DOMAIN}
 ACCOUNT=${account}
 
-uapi --output=jsonpretty --user=${ACCOUNT} Email list_pops no_validate=0 skip_main=1 | jq -r '.result.data[].email'
+TEMP_ACC_GET_ALL_EMAIL=${HOSTNAME}-${TEMPTEMP}-acc-get-all-email.txt
+_run "[email] Get All Email ${yellow}$${normal}" uapi --output=jsonpretty --user=${ACCOUNT} Email list_pops no_validate=0 skip_main=1 | jq -r '.result.data[].email' >$TEMP_ACC_GET_ALL_EMAIL
 
 TOTAL_EMAIL_ACCOUNT=$(uapi --output=jsonpretty --user=${ACCOUNT} Email list_pops no_validate=0 skip_main=1 | jq -r '.result.data[].email' | wc -l)
 
