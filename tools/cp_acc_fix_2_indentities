@@ -1,5 +1,5 @@
 #!/bin/bash
-# Description: cPanel Account Fix 2 Indentities [All]
+# Description: cPanel Account Fix 2 Indentities [All] *
 # Arguments: --domain=cP_DOMAIN
 set -e
 

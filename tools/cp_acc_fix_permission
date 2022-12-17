@@ -1,5 +1,5 @@
 #!/bin/bash
-# Description: cPanel Account Fix Permission
+# Description: cPanel Account Fix Permission *
 # Arguments: --domain=cP_DOMAIN
 set -e
 

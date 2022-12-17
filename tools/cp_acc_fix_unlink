@@ -1,5 +1,5 @@
 #!/bin/bash
-# Description: cPanel Account Fix Unlink [All]
+# Description: cPanel Account Fix Unlink [All] *
 # Arguments: --domain=cP_DOMAIN
 set -e
 
@@ -18,9 +18,9 @@ while read Email Domain; do
 
     if [ -d "${DIR}" ]; then
         cd ${DIR}
-        unlink $Email
+        _run "[unlink] unlink ${yellow}${Email}${normal}" unlink $Email
     else
-        _run "[unlink] ${yellow}${Email}${normal} does not exist." echo "[unlink] ${Email} does not exist."
+        echo "[unlink] ${yellow}${Email}${normal} ${red}does not exist${normal}."
         exit 1
     fi
 done <${TEMP_UNLINK_ALLEMAIL_ACCOUNT}
