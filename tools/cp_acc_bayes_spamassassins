@@ -35,5 +35,5 @@ else
 fi
 
 sleep 3
-_run "[spam] Restart spamd." /scripts/restartsrv_spamd
+_run "[spam] Restart ${yellow}spamd${normal}" /scripts/restartsrv_spamd
 exit 0
