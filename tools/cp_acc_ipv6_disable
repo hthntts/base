@@ -1,0 +1,10 @@
+#!/bin/bash
+# Description: cPanel Account IPv6 Disable
+# Arguments: --domain=cP_DOMAIN
+set -e
+
+_tool _cpanel
+_domain ${cP_DOMAIN}
+ACCOUNT=${account}
+
+_run "[ipv6] Disable IPv6 of ${yellow}${cP_DOMAIN}${normal}" whmapi1 --output=jsonpretty ipv6_disable_account user=$ACCOUNT range='SHARED'
