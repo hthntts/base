@@ -8,16 +8,6 @@ _domain ${cP_DOMAIN}
 local ACCOUNT=${account}
 local TMP=/tmp/${HOSTNAME}-${TEMPTEMP}-$1.txt
 
-<<<<<<< HEAD
 uapi --output=jsonpretty --user=${ACCOUNT} Email list_pops no_validate=0 skip_main=1 | jq -r '.result.data[].email' >${TMP}
-echo "[email] ----- Email: ${yellow}$TMP${normal} ... ${green}done${normal}."
-echo "[email] Total Email: ${yellow}$(cat ${TMP} | wc -l)${normal} ... ${green}done${normal}."
-=======
-TEMP_ACC_GET_ALL_EMAIL=${HOSTNAME}-${TEMPTEMP}-acc-get-all-email.txt
-_run "[email] Get All Email ${yellow}${TEMP_ACC_GET_ALL_EMAIL}${normal}" uapi --output=jsonpretty --user=${ACCOUNT} Email list_pops no_validate=0 skip_main=1 | jq -r '.result.data[].email' >$TEMP_ACC_GET_ALL_EMAIL
-
-TOTAL_EMAIL_ACCOUNT=$(uapi --output=jsonpretty --user=${ACCOUNT} Email list_pops no_validate=0 skip_main=1 | jq -r '.result.data[].email' | wc -l)
-
-_run "[email] Total Mailbox: ${yellow}$TOTAL_EMAIL_ACCOUNT${normal}" echo $TOTAL_EMAIL_ACCOUNT
-exit 0
->>>>>>> origin/cpanel
+echo "[email] /tmp/ Email: ${yellow}$TMP${normal} ... ${green}done${normal}."
+echo "[email] Total Email: ${yellow}$(cat ${TMP} | wc -l)${normal}"
