@@ -12,7 +12,7 @@ TEMP_UNLINK_ALLEMAIL_ACCOUNT=/tmp/${HOSTNAME}-${TEMPTEMP}-system-fix-unlink-all-
 ls -all /home/${ACCOUNT}/mail/ | awk '$9 ~ /@/' | awk '{print $9, $11;}' | cut -d'/' -f1 >${TEMP_UNLINK_ALLEMAIL_ACCOUNT}
 
 cat ${TEMP_UNLINK_ALLEMAIL_ACCOUNT} | while read Email Domain; do
-    Account=$(/scripts/whoowns $1)
+    Account=$(/scripts/whoowns ${cP_DOMAIN})
     DIR=/home/${Account}/mail/
 
     if [ -d "${DIR}" ]; then
