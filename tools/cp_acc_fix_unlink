@@ -11,9 +11,8 @@ TEMP_UNLINK_ALLEMAIL_ACCOUNT=/tmp/${HOSTNAME}-${TEMPTEMP}-system-fix-unlink-all-
 
 ls -all /home/${ACCOUNT}/mail/ | awk '$9 ~ /@/' | awk '{print $9, $11;}' | cut -d'/' -f1 >${TEMP_UNLINK_ALLEMAIL_ACCOUNT}
 
-while read Email Domain; do
+cat ${TEMP_UNLINK_ALLEMAIL_ACCOUNT} | while read Email Domain; do
     Account=$(/scripts/whoowns $1)
-    echo "[unlink] $Email - $Domain - $Account"
     DIR=/home/${Account}/mail/
 
     if [ -d "${DIR}" ]; then
@@ -23,4 +22,4 @@ while read Email Domain; do
         echo "[unlink] ${yellow}${Email}${normal} ${red}does not exist${normal}."
         exit 1
     fi
-done <${TEMP_UNLINK_ALLEMAIL_ACCOUNT}
+done
