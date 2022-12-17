@@ -12,16 +12,16 @@ ACCOUNT=${account}
 for user in $ACCOUNT; do
     HOMEDIR=$(egrep "^${user}:" /etc/passwd | cut -d: -f6)
     if [ ! -f /var/cpanel/users/$user ]; then
-        echo "[permission] $user user file missing, likely an invalid user."
+        echo "[permission] ${yellow}$user${normal} user file missing, likely an invalid user."
     elif [ "$HOMEDIR" == "" ]; then
-        echo "[permission] Couldn't determine home directory for $user."
+        echo "[permission] Couldn't determine home directory for ${yellow}$user${normal}."
     else
-        echo "[permission] Setting ownership for user $user."
+        echo "[permission] Setting ownership for user ${yellow}$user${normal}."
         chown -R $user:$user $HOMEDIR
         chmod 711 $HOMEDIR
         chown $user:nobody $HOMEDIR/public_html $HOMEDIR/.htpasswds
         chown $user:mail $HOMEDIR/etc $HOMEDIR/etc/*/shadow $HOMEDIR/etc/*/passwd
-        echo "[permission] Setting permissions for user $ACCOUNT."
+        echo "[permission] Setting permissions for user ${yellow}$ACCOUNT${normal}."
         find $HOMEDIR -type f -exec chmod 644 {} \;
         find $HOMEDIR -type d -exec chmod 755 {} \;
         find $HOMEDIR -type d -name cgi-bin -exec chmod 755 {} \;
