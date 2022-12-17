@@ -1,5 +1,5 @@
 #!/bin/bash
-# Description: cPanel System Check DKIM
+# Description: cPanel System Check DKIM [All]
 # Arguments:
 set -e
 

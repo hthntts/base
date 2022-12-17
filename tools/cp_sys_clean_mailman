@@ -1,5 +1,5 @@
 #!/bin/bash
-# Description: cPanel System Clean Mailman
+# Description: cPanel System Clean Mailman [All]
 # Arguments:
 set -e
 

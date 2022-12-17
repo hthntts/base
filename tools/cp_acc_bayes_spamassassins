@@ -1,5 +1,5 @@
 #!/bin/bash
-# Description: cPanel Account Bayes Spamassassins
+# Description: cPanel Account Bayes Spamassassins [All]
 # Arguments: --domain=cP_DOMAIN
 set -e
 

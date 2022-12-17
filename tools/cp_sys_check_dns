@@ -1,5 +1,5 @@
 #!/bin/bash
-# Description: cPanel System Check DNS
+# Description: cPanel System Check DNS [All]
 # Arguments:
 set -e
 

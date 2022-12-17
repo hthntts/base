@@ -1,5 +1,5 @@
 #!/bin/bash
-# Description: cPanel Account Disk Usage All Email
+# Description: cPanel Account Disk Usage [All]
 # Arguments: --domain=cP_DOMAIN
 set -e
 

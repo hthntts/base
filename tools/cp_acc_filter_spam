@@ -1,5 +1,5 @@
 #!/bin/bash
-# Description: cPanel Account Filter [SPAM] All Email
+# Description: cPanel Account Filter [SPAM] [All]
 # Arguments: --domain=cP_DOMAIN
 set -e
 

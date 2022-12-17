@@ -1,5 +1,5 @@
 #!/bin/bash
-# Description: cPanel System Fix Unlink All Email
+# Description: cPanel System Fix Unlink [All]
 # Arguments:
 set -e
 

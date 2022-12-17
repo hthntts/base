@@ -1,0 +1,16 @@
+#!/bin/bash
+# Description: cPanel Account Fix 2 Indentities [All]
+# Arguments: --domain=cP_DOMAIN
+set -e
+
+_tool _cpanel
+_domain ${cP_DOMAIN}
+ACCOUNT=${account}
+
+TEMP_2_INDENTITIES_ACCOUNT=/tmp/${HOSTNAME}-${TEMPTEMP}-account-fix-2-indentities.txt
+
+ls -1A /home/${ACCOUNT}/etc/*/*.rcube.db >${TEMP_2_INDENTITIES_ACCOUNT}
+while read list; do
+    _run "[fix] Backup ${yellow}${list}.${TEMPTEMP}${normal}" cp $list{,.${TEMPTEMP}}
+    _run "[fix] Fix DB ${yellow}${list}${normal}" sqlite3 $list 'DELETE FROM identities WHERE identity_id = 2;'
+done <${TEMP_2_INDENTITIES_ACCOUNT}
