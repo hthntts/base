@@ -1,0 +1,14 @@
+#!/bin/bash
+# Description: Test Description
+# Arguments: Test Arguments
+set -Eeo pipefail
+
+[[ -z "${cP_DOMAIN:-}" ]] && die "[${RED}Missing${NORMAL}] ${YELLOW}cP_DOMAIN${NORMAL} --> ${BLUE}Is Empty${NORMAL}"
+
+while true; do
+    echo Test
+    sleep 1
+done
+
+msg "${GREEN}Xin ${BOLD}CHAO${NORMAL}"
+_run "[$1] List folder" ls -all
