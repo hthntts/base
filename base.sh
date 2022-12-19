@@ -11,6 +11,7 @@ TIME=$(date +%H-%M-%S)
 _DAY=$(date +%Y%m%d)
 _TIME=$(date +%H%M%S)
 TEMP_TEMP=${_DAY}${_TIME}
+ISOF=$(date --iso-8601=seconds)
 
 PATH_ROOT=$(dirname "$0")
 PATH_TOOL=$PATH_ROOT/tools
@@ -127,7 +128,7 @@ Options:
   -r, --restart     Restart the shell upon completion.
   --no-color        Disable color
 
-If no [tool] (and the -A/--all flag is not set), the 'bash' tool will be setup.
+If no [tool] (and the -A/--all flag is not set), the 'demo' tool will be setup.
 
 EOF
             exit_with_error
