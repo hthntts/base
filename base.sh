@@ -1,84 +1,93 @@
-#!/usr/bin/env bash
+#!/bin/bash
 RES1=$(date +%s.%N)
 
 set +e
 trap cleanup SIGTERM ERR EXIT
-trap "echo ------ [The script is terminated] ------^C; exit_with_error" SIGINT
-
-DAY=$(date +%Y-%m-%d)
-TIME=$(date +%H-%M-%S)
-
-_DAY=$(date +%Y%m%d)
-_TIME=$(date +%H%M%S)
-TEMP_TEMP=${_DAY}${_TIME}
-ISOF=$(date --iso-8601=seconds)
+trap "echo ------ [The script is terminated] ------C^; exit_with_error" SIGINT
 
 PATH_ROOT=$(dirname "$0")
-PATH_TOOL=$PATH_ROOT/tools
-tools=$(ls $PATH_TOOL | grep -v '^_' | sort)
-INSTALL=()
+PATH_TOOL=${PATH_ROOT}/tools
+TOOLS=$(ls ${PATH_TOOL} | grep -v '^_' | sort)
+SETUP=()
 STACK=()
 
+FISO=$(date --iso-8601=seconds)
+DATE=$(date +%Y-%m-%d)
+TIME=$(date +%H-%M-%S)
+_DATE=$(date +%Y%m%d)
+_TIME=$(date +%H%M%S)
+FDAY=${_DATE}${_TIME}
+
+# TRASH=$(mktemp -t tmp.XXXXXXXXXX)
+function cleanup {
+    trap - SIGINT SIGTERM ERR EXIT
+    # echo "Removing temporary files: $TRASH"
+    # rm -rf "$TRASH"
+    # exit_with_error
+}
+
 function setup_colors {
-    if test -t 1 && [[ -z "${NO_COLOR-}" ]]; then
-        tcolors=$(tput colors)
-        if test -n "$tcolors" && test $tcolors -ge 8; then
-            DIM="$(tput dim)"
-            BOLD="$(tput bold)"
-            NORMAL="$(tput sgr0)"
-            RED="$(tput setaf 1)"
-            GREEN="$(tput setaf 2)"
-            YELLOW="$(tput setaf 3)"
-            BLUE="$(tput setaf 4)"
-            MAGENTA="$(tput setaf 125)"
-            CYAN="$(tput setaf 6)"
-        fi
+    if [[ -z "$NO_COLOR" ]]; then
+        source ${PATH_ROOT}/color.sh
     fi
 }
 
 function exit_with_error {
     local duration=$(echo "$(date +%s.%N) - $RES1" | bc)
     local execution_time=$(printf "%.4f Seconds <<<" $duration)
-    echo ">>> [${RED}Incomplete Process${NORMAL}]: $execution_time"
+    _msg ">>> [${Red}Incomplete Process${Normal}]: $execution_time"
     exit 1
 }
 
-function msg {
+function _msg {
     echo >&2 -e "${1-}"
 }
 
-function cleanup {
-    trap - SIGINT SIGTERM ERR EXIT
-    # TRASH=$(mktemp -t tmp.XXXXXXXXXX)
-    # echo "Removing temporary files: $TRASH"
-    # rm -rf "$TRASH"
-    # exit_with_error
-}
-
-function die {
+function _die {
     local msg=$1
     local code=${2-1}
-    msg "$msg"
+    _msg "$msg"
     # exit "$code"
     exit_with_error
 }
 
 function _run {
-    local msgl=$1
+    local msg=$1
     shift
     if [ -z "$DEBUG" ]; then
-        echo -n "$msgl ${BLUE}-->${NORMAL} "
+        printf "$msg ${Blue}-->${Normal} "
         "$@" >/dev/null 2>&1
     else
-        echo "$msgl"
+        echo "$msg"
         "$@"
     fi
-    echo "${GREEN}Done${NORMAL}"
+    printf "${Color01}Done${Normal}\n"
+}
+
+function _tool {
+    local tool
+    local path
+    if [ -f "$1" ]; then
+        tool="$(basename $1)"
+        path=$(dirname "$1")
+    elif [ -f "${PATH_TOOL}/$1" ]; then
+        tool="$1"
+        path="${PATH_TOOL}"
+    else
+        _msg "-- Tool [${Bold}${Blue}$1${Normal}] ${Red}does not exist${Normal}." >&2
+        exit_with_error
+    fi
+    STACK+=("$1")
+    pushd "$path" >/dev/null
+    _msg "${Dim}-- Tool [${STACK[@]}]${Normal}"
+    source "./${tool}"
+    popd >/dev/null
+    unset 'STACK[${#STACK[@]}-1]'
 }
 
 while [[ $# -gt 0 ]]; do
     case $1 in
-        -D | --debug)
+        -d | --debug)
             DEBUG=1
             shift
             ;;
@@ -88,7 +97,7 @@ while [[ $# -gt 0 ]]; do
             ;;
         -l | --list)
             printf "%-45s %s %s\n" "-----Description-----" "-----Tools-----"
-            for tool in $tools; do
+            for tool in ${TOOLS}; do
                 description=$(grep '^# Description: ' "${PATH_TOOL}/$tool" | cut -d' ' -f 3-)
                 argument=$(grep '^# Arguments: ' "${PATH_TOOL}/$tool" | cut -d' ' -f 3-)
                 printf "%-45s %s %s\n" "$description" "$tool" "$argument"
@@ -96,7 +105,7 @@ while [[ $# -gt 0 ]]; do
             exit_with_error
             ;;
         -A | --all)
-            INSTALL=($tools)
+            SETUP=(${TOOLS})
             shift
             ;;
         -r | --restart)
@@ -108,11 +117,11 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
         --domain=*)
-            cP_DOMAIN="${1#*=}"
+            DOMAIN="${1#*=}"
             shift
             ;;
         --email=*)
-            cP_EMAIL="${1#*=}"
+            EMAIL="${1#*=}"
             shift
             ;;
         -h | --help)
@@ -121,12 +130,12 @@ Usage: $(basename $0) [option] [tool]
 
 Options:
   -A, --all         Install all available tools.
-  -D, --debug       Enable debug logging, including command output for each step.
+  -d, --debug       Enable debug logging, including command output for each step.
   -v, --verbose     Enable verbose mode.
   -h, --help        Display this help text and exit.
   -l, --list        Display all available tools and exit.
   -r, --restart     Restart the shell upon completion.
-  --no-color        Disable color
+  --no-color        Disable color output.
 
 If no [tool] (and the -A/--all flag is not set), the 'demo' tool will be setup.
 
@@ -140,39 +149,17 @@ EOF
     esac
 done
 
-INSTALL=($(for tool in "${INSTALL[@]}"; do
+SETUP=($(for tool in "${SETUP[@]}"; do
     echo $tool
 done | sort | uniq))
 
 setup_colors
 
-function _tool {
-    local tool
-    local path
-    if [ -f "$1" ]; then
-        tool="$(basename $1)"
-        path=$(dirname "$1")
-    elif [ -f "${PATH_TOOL}/$1" ]; then
-        tool="$1"
-        path="${PATH_TOOL}"
-    else
-        msg "-- Tool [${BOLD}${BLUE}$1${NORMAL}] ${RED}does not exist${NORMAL}." >&2
-        exit_with_error
-    fi
-    STACK+=("$1")
-    pushd "$path" >/dev/null
-    msg "${DIM}-- Tool [${STACK[@]}]${NORMAL}"
-    source "./${tool}"
-    popd >/dev/null
-    unset 'STACK[${#STACK[@]}-1]'
-
-}
-
-if [ "${#INSTALL[@]}" -eq 0 ]; then
-    INSTALL=(demo)
+if [ "${#SETUP[@]}" -eq 0 ]; then
+    SETUP=(demo)
 fi
 
-for tool in "${INSTALL[@]}"; do
+for tool in "${SETUP[@]}"; do
     _tool $tool
 done
 
@@ -181,7 +168,7 @@ if [ -n "$RESTART_SHELL" ]; then
     exec $SHELL
 fi
 
-# end time & calculate
+# ---------------------------------------------------------------------
 RES2=$(date +%s.%N)
 dt=$(echo "$RES2 - $RES1" | bc)
 dd=$(echo "$dt/86400" | bc)
@@ -191,4 +178,4 @@ dt3=$(echo "$dt2-3600*$dh" | bc)
 dm=$(echo "$dt3/60" | bc)
 ds=$(echo "$dt3-60*$dm" | bc)
 
-printf ">>> [${CYAN}Process Completed${NORMAL}] - [%d Days, %02d Hours, %02d Minutes, %02.4f Seconds] <<<\n" $dd $dh $dm $ds
+printf ">>> [${Cyan}Process Completed${Normal}] - [%d Days, %02d Hours, %02d Minutes, %02.4f Seconds] <<<\n" $dd $dh $dm $ds
