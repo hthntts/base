@@ -1,0 +1,29 @@
+#!/bin/bash
+# Description: cPanel System Growth
+# Arguments:
+set -e
+
+SV=$(cat /etc/zabbix/scripts/server.txt)
+DOMAIN_TOTAL=$(whmapi1 --output=jsonpretty get_current_users_count | jq -r '.data.users')
+DOMAIN_SUSPENDED=$(whmapi1 --output=jsonpretty listsuspended | jq -r '.data.account | length')
+DOMAIN_ACTIVE=$(expr $DOMAIN_TOTAL - $DOMAIN_SUSPENDED)
+MAILBOX=$(sed "s|:||g" /etc/userdomains | awk '!/^\* nobody/{print $1, $2 | "sort | uniq" }' | awk '{print "cat /home/"$2"/etc/"$1"/passwd"}' | sh 2>/dev/null | wc -l)
+
+__growth() {
+    sv="$1"
+    domain_total="$2"
+    domain_suspended="$3"
+    domain_active="$4"
+    mailbox="$5"
+    echo '{}' | jq --monochrome-output \
+        --raw-output \
+        --compact-output \
+        --arg sv "$sv" \
+        --arg domain_total "$domain_total" \
+        --arg domain_suspended "$domain_suspended" \
+        --arg domain_active "$domain_active" \
+        --arg mailbox "$mailbox" \
+        '.sv=$sv|.domain_total=$domain_total|.domain_suspended=$domain_suspended|.domain_active=$domain_active|.mailbox=$mailbox'
+}
+
+__growth "${SV}" "${DOMAIN_TOTAL}" "${DOMAIN_SUSPENDED}" "${DOMAIN_ACTIVE}" "$MAILBOX"
