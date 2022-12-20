@@ -1,0 +1,17 @@
+#!/bin/bash
+# Description: cPanel Account Restore Shadow
+# Arguments: --domain=DOMAIN
+set -e
+
+_tool _cp
+_domain ${DOMAIN}
+local ACCOUNT=${account}
+
+PATH_SHADOW=/home/${ACCOUNT}/etc/${DOMAIN}/shadow
+PATH_SHADOW_BK=/home/${ACCOUNT}/etc/${DOMAIN}/${BK_SHADOW}
+
+[[ -z "${BK_SHADOW:-}" ]] && _die "${Yellow}BK_SHADOW${Normal} ${Blue}-->${Normal} ${Red}does not exist${Normal}."
+
+_run "[$1] File ${Yellow}${PATH_SHADOW}.${FDAY}${Normal}" cp ${PATH_SHADOW}{,.${FDAY}}
+_run "[$1] Copy ${Yellow}${PATH_SHADOW_BK}${Normal} to ${Yellow}${PATH_SHADOW}${Normal}" cat $PATH_SHADOW_BK >${PATH_SHADOW}
+ls -al /home/${ACCOUNT}/etc/${DOMAIN}/ | grep "shadow"
