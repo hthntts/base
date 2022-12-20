@@ -1,6 +1,6 @@
 #!/bin/bash
 # Description: cPanel System Queue Max Deffer
-# Arguments: --domain=DOMAIN
+# Arguments:
 set -e
 
 _tool _cp

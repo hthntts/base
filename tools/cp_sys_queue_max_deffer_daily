@@ -1,0 +1,17 @@
+#!/bin/bash
+# Description: cPanel System Queue Max Deffer Daily
+# Arguments:
+set -e
+
+_tool _cp
+_domain ${DOMAIN}
+local ACCOUNT=${account}
+local PATH_LIMITS=/var/cpanel/email_send_limits
+
+if [ -f ${PATH_LIMITS}/daily_notify/${DOMAIN} ]; then
+    _msg "[$1] Remove Max Deffer Daily ${Yellow}${DOMAIN}${Normal}"
+    rm -rf ${PATH_LIMITS}/daily_notify/${DOMAIN}
+    rm -rf ${PATH_LIMITS}/daily_notify/${DOMAIN}_send
+else
+    _msg "[$1] File Email Send Limits ${Yellow}${DOMAIN}${Normal} ${Blue}-->${Normal} ${Red}does not exist${Normal}."
+fi
