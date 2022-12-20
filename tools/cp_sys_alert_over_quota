@@ -1,0 +1,26 @@
+#!/bin/bash
+# Description: cPanel System Alert Over Quota
+# Arguments:
+set -e
+
+_tool _cp
+
+local PATH_SNMP=/etc/snmp/scripts/over_quota.txt
+>${PATH_SNMP}
+
+PERCENT_ALERT=90
+
+awk -F ": " '{print $1,$2}' /etc/trueuserdomains | grep -v salehost | while read DOMAIN USER; do
+    diskused=$(whmapi1 accountsummary user=$USER | grep diskused | awk {'print$2'} | cut -d "M" -f1)
+    disklimit=$(whmapi1 accountsummary user=$USER | grep disklimit | awk {'print$2'} | cut -d "M" -f1)
+    package=$(grep -w $USER /etc/userplans | awk -F ": " '{print $2}')
+    percent=$(printf %.0f\\n "$((100 * $diskused / $disklimit))e-0")
+    hostname=$(hostname)
+    if [[ $percent -ge $PERCENT_ALERT ]]; then
+        limitint=$(echo "$disklimit * 1" | bc)
+        limit=$(echo "$limitint * 1024*1024" | bc)
+        usedint=$(echo "$diskused * 1" | bc)
+        used=$(echo "$usedint * 1024*1024" | bc)
+        echo -e "$hostname $DOMAIN $package $percent $limit $used" >>${PATH_SNMP}
+    fi
+done
