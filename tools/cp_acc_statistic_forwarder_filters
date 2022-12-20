@@ -1,0 +1,53 @@
+#!/bin/bash
+# Description: cPanel Account Statistic Forwarder Filters
+# Arguments: --domain=DOMAIN
+set -e
+
+_tool _cp
+_domain ${DOMAIN}
+local ACCOUNT=${account}
+local TXT=/tmp/${DOMAIN}-${FDAY}-mailbox.txt
+
+ls -d /home/$ACCOUNT/mail/$DOMAIN/*/ | awk 'BEGIN {
+        }
+        {
+        tcmd = "test -d " $1
+        if(!system(tcmd)){
+        split($1,MyArray,"/")
+        print MyArray[6] "@" MyArray[5]
+        }
+        }
+        ' >${TXT}
+
+# Statistic
+## Count Forwarders
+FORWARDERS_TOTAL=$(uapi --output=jsonpretty --user=$ACCOUNT Email count_forwarders | jq -r '.result.data')
+
+## Count Email Filter
+EMAIL_FILTER_TOTAL=$(find /home/$ACCOUNT/etc/$DOMAIN/ -name '*yaml' | wc -l)
+
+## Count Global Filter
+GLOBAL_FILTER_TOTAL=$(uapi --output=jsonpretty --user=$ACCOUNT Email count_filters | jq -r '.result.data')
+
+## Show Statistic
+_msg "[$1] Total Forwarders: ${Yellow}$FORWARDERS_TOTAL${Normal}"
+_msg "[$1] Total Global Filter: ${Yellow}$GLOBAL_FILTER_TOTAL${Normal}"
+_msg "[$1] Total Email Filter: ${Yellow}$EMAIL_FILTER_TOTAL${Normal}"
+
+# List Email Forwarders
+if [ $FORWARDERS_TOTAL != 0 ]; then
+    _msg "[$1] Email Forwarders ${Yellow}$DOMAIN${Normal}"
+    cat ${TXT} | while read email; do
+        sed "s|:| ->|g" /etc/valiases/$DOMAIN | awk '$1 ~ /^'$email'/ && !/autorespond/' | sed "s/^/[$1] Email Forwarders $DOMAIN | /"
+    done
+fi
+
+# List Email Filters
+if [ $EMAIL_FILTER_TOTAL != 0 ]; then
+    _msg "[$1] Email Filters ${Yellow}$DOMAIN${Normal}"
+    cat ${TXT} | while read email; do
+        uapi --user=$ACCOUNT Email list_filters ACCOUNT=$email | awk '$1 ~ /^'dest'/ && !/INBOX/ {print $2}' | while read delivery; do
+            _msg "[$1] Email Filters $DOMAIN | $email -> $delivery"
+        done
+    done
+fi
