@@ -3,7 +3,7 @@
 # Arguments:
 set -e
 
-_tool _cpanel
+_tool _cp
 
 LOG_SPAM=/var/log/exim_spamlog
 date=$(date '+%Y-%m-%d %H:%M:%S')
@@ -119,10 +119,10 @@ while [ $counter -lt 60 ]; do
         count_sender_15m
         frozen
         bounce
-        exit 1
+        exit_with_error
     fi
 
     sleep $interval
     counter=$(($counter + $interval))
 done
-exit 0
+exit_with_error

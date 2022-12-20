@@ -9,29 +9,26 @@ for i in $(/usr/local/cpanel/3rdparty/mailman/bin/list_lists -b); do
 
     # Check directory mailing list
     if [ -d ${MAINMAN_PATH}/$i ]; then
-        echo "[mailman] ${yellow}$i${normal} --> ${green}exist${normal}."
-        _run "[mailman] remove exist list" rm -rf ${MAINMAN_PATH}/$i/*
+        _msg "[$1] ${Yellow}$i${normal} --> ${Green}exist${Normal}."
+        _run "[$1] remove exist list" rm -rf ${MAINMAN_PATH}/$i/*
     else
-        echo "[mailman] ${yellow}$i${normal} --> ${red}does not exist${normal}."
+        _msg "[$1] ${Yellow}$i${Normal} --> ${Red}does not exist${Normal}."
     fi
 
     # Check file mailing list MBOX
     if [ -f ${MAINMAN_PATH}/$i'.mbox'/$i'.mbox' ]; then
-        echo "[mailman] mailing list MBOX $i ${green}exist${normal}."
-        echo "" >${MAINMAN_PATH}/$i'.mbox'/$i'.mbox'
+        _msg "[$1] mailing list MBOX $i ${Green}exist${Normal}."
+        _msg "" >${MAINMAN_PATH}/$i'.mbox'/$i'.mbox'
     else
-        echo "[mailman] mailing list MBOX $i ${red}does not exist${normal}."
-        _run "[mailman] touch" touch ${MAINMAN_PATH}/$i'.mbox'/$i'.mbox'
-        _run "[mailman] chown -R mailman.mailman" chown -R mailman.mailman ${MAINMAN_PATH}/$i'.mbox'/$i'.mbox'
+        _msg "[$1] mailing list MBOX $i ${Red}does not exist${Normal}."
+        _run "[$1] touch" touch ${MAINMAN_PATH}/$i'.mbox'/$i'.mbox'
+        _run "[$1] chown -R mailman.mailman" chown -R mailman.mailman ${MAINMAN_PATH}/$i'.mbox'/$i'.mbox'
     fi
-
-    _run "[mailman] Refresh Mailing List $i" /usr/local/cpanel/3rdparty/mailman/bin/arch --wipe $i
+    _run "[$1] Refresh Mailing List $i" /usr/local/cpanel/3rdparty/mailman/bin/arch --wipe $i
 
     # Permission mailing list
-    _run "[mailman] chown -R mailman.mailman" chown -R mailman.mailman ${MAINMAN_PATH}/$i
-    _run "[mailman] chown mailman.nobody" chown mailman.nobody ${MAINMAN_PATH}/$i
-    _run "[mailman] chmod 710" chmod 710 ${MAINMAN_PATH}/$i
-
-    _run "[mailman] Update Mailman Cache." /scripts/update_mailman_cache
+    _run "[$1] chown -R mailman.mailman" chown -R mailman.mailman ${MAINMAN_PATH}/$i
+    _run "[$1] chown mailman.nobody" chown mailman.nobody ${MAINMAN_PATH}/$i
+    _run "[$1] chmod 710" chmod 710 ${MAINMAN_PATH}/$i
+    _run "[$1] Update Mailman Cache." /scripts/update_mailman_cache
 done
-exit 0

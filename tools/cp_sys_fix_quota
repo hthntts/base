@@ -3,19 +3,17 @@
 # Arguments:
 set -e
 
-TEMP_ACCOUNT=/tmp/${HOSTNAME}-${TEMPTEMP}-account
-TEMP_ACCOUNT_QUOTA=/tmp/${HOSTNAME}-${TEMPTEMP}-account-quota
-TEMP_ACCOUNT_QUOTA_NOT_FOUND=/tmp/${HOSTNAME}-${TEMPTEMP}-account-quota-not-found
+local TXT01=/tmp/${HOSTNAME}-${FDAY}-account
+local TXT02=/tmp/${HOSTNAME}-${FDAY}-account-quota
+local TXT03=/tmp/${HOSTNAME}-${FDAY}-account-quota-not-found
 
-ls /home/*/etc/*/quota | cut -d'/' -f3 | sort -n >${TEMP_ACCOUNT_QUOTA}
-cat /etc/userdomains | awk '{print $2}' | sort -n | sed '/nobody/d' >${TEMP_ACCOUNT}
-diff -u ${TEMP_ACCOUNT_QUOTA} ${TEMP_ACCOUNT} | grep -E '^\+' | sed 's/^+//g' | sed '1d' >${TEMP_ACCOUNT_QUOTA_NOT_FOUND}
+ls /home/*/etc/*/quota | cut -d'/' -f3 | sort -n >${TXT02}
+cat /etc/userdomains | awk '{print $2}' | sort -n | sed '/nobody/d' >${TXT01}
+diff -u ${TXT02} ${TXT01} | grep -E '^\+' | sed 's/^+//g' | sed '1d' >${TXT03}
 
 while IFS= read -r line; do
-    echo -n "[fix] Quota ${yellow}$line${normal}."
     domain=$(cat /etc/userdomains | grep $line | cut -d: -f1)
     touch /home/$line/etc/$domain/quota
-    echo -n " ... "
     chown $line.mail /home/$line/etc/$domain/quota
-    echo "${green}done${normal}"
-done <${TEMP_ACCOUNT_QUOTA_NOT_FOUND}
+    _msg "[$1] Quota ${Yellow}$line${Normal} ${Blue}-->${Normal} ${Color01}Done${Normal}"
+done <${TXT03}

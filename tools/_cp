@@ -1,0 +1,53 @@
+#!/bin/bash
+# Description: cPanel
+set -Ee
+
+PASSWORD=$(date +%s | sha256sum | base64 | head -c 18)
+ALIAS_HOSTNAME=$(hostname -a)
+
+function _domain {
+    account=$(grep -E ^$1: /etc/userdomains | sed 's/://g' | awk '{print $2}')
+    # account=$(/scripts/whoowns $1)
+    if [ -z $account ]; then
+        _msg "[domain] ${Yellow}DOMAIN${Normal} ${Blue}-->${Normal} ${Red}does not exist${Normal}."
+        exit_with_error
+    else
+        _msg "[domain] ${Yellow}$1${Normal} ${Blue}-->${Normal} ${Green}exist${Normal}."
+    fi
+}
+
+function _mkdir {
+    if [ -e $1 ]; then
+        _msg "[mkdir] ${Yellow}$1${Normal} ${Blue}-->${Normal} ${Green}exist${Normal}."
+    else
+        _run "[mkdir] Create Directory ${Yellow}$1${Normal}" mkdir -p $1
+    fi
+}
+
+function _restart {
+    _run "[service] Restart ${Yellow}$1${Normal}" /scripts/restartsrv_$1
+}
+
+function _mount {
+    if grep -qs "$1" /proc/mounts; then
+        _msg "[mount] ${Yellow}$1${Normal} is already mounted, skipping."
+    else
+        _msg "[mount] ${Yellow}$1${Normal} is not mounted."
+        timeout 5s mount "$1"
+        if [ $? -eq 0 ]; then
+            _msg "[mount] ${Yellow}$1${Normal} is mount success!"
+        else
+            _msg "[mount] Something went wrong with the ${Yellow}$1${Normal}, stop script."
+            exit_with_error
+        fi
+    fi
+}
+
+function _noti {
+    curl \
+        -H prio:high \
+        -H title:"$2" \
+        -H tags:warning,skull \
+        -d "$3" \
+        https://noti.sunrisevnlog.xyz/$1
+}

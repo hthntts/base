@@ -3,17 +3,17 @@
 # Arguments:
 set -e
 
-_tool _cpanel
+_tool _cp
 
 cat /etc/domainusers | awk '{print $1}' | sed 's/://g' | while read USER_LOCAL; do
     symlink=/home/$USER_LOCAL/public_html/index.html
     if [ -e "$symlink" ]; then
         if [ ! -L "$symlink" ]; then
-            _run "File index.html in ${yellow}$USER_LOCAL${normal} is not a symlink and will be made a symlink." ln -sf /usr/local/src/index.html $symlink.
+            _run "[$1] index.html in ${Yellow}$USER_LOCAL${Normal} is not a symlink and will be made a symlink." ln -sf /usr/local/src/index.html $symlink.
         else
-            _run "File index.html in ${yellow}$USER_LOCAL${normal} is available and is a symlink." echo $USER_LOCAL
+            _run "[$1] index.html in ${Yellow}$USER_LOCAL${Normal} is available and is a symlink." echo $USER_LOCAL
         fi
     else
-        _run "File index.html in ${yellow}$USER_LOCAL${normal} is unavailable and will be created." ln -sf /usr/local/src/index.html $symlink.
+        _run "[$1] index.html in ${Yellow}$USER_LOCAL${Normal} is unavailable and will be created." ln -sf /usr/local/src/index.html $symlink.
     fi
 done

@@ -3,12 +3,11 @@
 # Arguments:
 set -e
 
-_tool _cpanel
+_tool _cp
 
-TEMP_DKIM=/tmp/${HOSTNAME}-${TEMPTEMP}-system-check-dkim.txt
-sed "s|:||g" /etc/userdomains | awk '!/^\* nobody/{print $1, $2 | "sort | uniq" }' >${TEMP_DKIM}
+local TXT=/tmp/${HOSTNAME}-${FDAY}-system-check-dkim.txt
+sed "s|:||g" /etc/userdomains | awk '!/^\* nobody/{print $1, $2 | "sort | uniq" }' >${TXT}
 while read domain account; do
     STATUS=$(whmapi1 --output=jsonpretty validate_current_dkims domain=$domain | jq '.data.payload | .[].state')
     _run "[dkim] $domain - $STATUS." echo $domain - $STATUS
-done <${TEMP_DKIM}
-exit 1
+done <${TXT}

@@ -3,16 +3,16 @@
 # Arguments:
 set -e
 
-_tool _cpanel
+_tool _cp
 
 BKDIR="/backup"
-_mount ${BKDIR}
+# _mount ${BKDIR}
 _mkdir ${BKDIR}/${HOSTNAME}
-_mkdir ${BKDIR}/${HOSTNAME}/${DAY}
+_mkdir ${BKDIR}/${HOSTNAME}/${DATE}
 
-for account in $(cat /etc/userdomains | awk {'print $2'}); do
-    _run "[backup] Backup Account $account." /scripts/pkgacct --backup --skiplogs $account ${BKDIR}/${HOSTNAME}/${DAY}
+for account in $(cat /etc/userdomains | awk {'print $2'} | sed /nobody/d); do
+    _run "[$1] Backup Account ${Yellow}$account${Normal}" /scripts/pkgacct --backup --skiplogs $account ${BKDIR}/${HOSTNAME}/${DATE}/
 done
 
 cd ${BKDIR}/${HOSTNAME}/
-_run "[backup] Keep Last 3 Backup." ls -lt | tail -n +6 | awk '{print $9}' | xargs rm -r
+_run "[$1] Keep Last 3 Backup" ls -lt | tail -n +6 | awk '{print $9}' | xargs rm -rf

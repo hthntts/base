@@ -1,10 +1,10 @@
 #!/bin/bash
 # Description: cPanel Account Get Domain Owner
-# Arguments: --domain=cP_DOMAIN
+# Arguments: --domain=DOMAIN
 set -e
 
-_tool _cpanel
-_domain ${cP_DOMAIN}
-ACCOUNT=${account}
+_tool _cp
+_domain ${DOMAIN}
+local ACCOUNT=${account}
 
-_run "[domain] ${yellow}${cP_DOMAIN}${normal} --> [owner] ${red}${ACCOUNT}${normal}"
+_msg "[$1] [domain] ${Yellow}${DOMAIN}${Normal} --> [owner] ${Red}${ACCOUNT}${Normal}"

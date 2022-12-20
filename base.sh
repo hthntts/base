@@ -58,7 +58,7 @@ function _run {
         printf "$msg ${Blue}-->${Normal} "
         "$@" >/dev/null 2>&1
     else
-        echo "$msg"
+        printf "$msg ${Blue}-->${Normal} "
         "$@"
     fi
     printf "${Color01}Done${Normal}\n"
@@ -74,12 +74,12 @@ function _tool {
         tool="$1"
         path="${PATH_TOOL}"
     else
-        _msg "-- Tool [${Bold}${Blue}$1${Normal}] ${Red}does not exist${Normal}." >&2
+        # echo -e "-- Tool [${Bold}${Blue}$1${Normal}] ${Red}does not exist${Normal}." >&2
         exit_with_error
     fi
     STACK+=("$1")
     pushd "$path" >/dev/null
-    _msg "${Dim}-- Tool [${STACK[@]}]${Normal}"
+    # echo -e "${Dim}-- Tool [${STACK[@]}]${Normal}"
     source "./${tool}"
     popd >/dev/null
     unset 'STACK[${#STACK[@]}-1]'
@@ -143,7 +143,7 @@ EOF
             exit_with_error
             ;;
         *)
-            INSTALL+=("$1")
+            SETUP+=("$1")
             shift
             ;;
     esac

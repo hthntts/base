@@ -1,27 +1,27 @@
 #!/bin/bash
-# Description: cPanel Account Fix Permission *
-# Arguments: --domain=cP_DOMAIN
+# Description: cPanel Account Fix Permission
+# Arguments: --domain=DOMAIN
 set -e
 
-_tool _cpanel
-_domain ${cP_DOMAIN}
-ACCOUNT=${account}
+_tool _cp
+_domain ${DOMAIN}
+local ACCOUNT=${account}
 
 # ACCOUNT=$@
 
 for user in $ACCOUNT; do
     HOMEDIR=$(egrep "^${user}:" /etc/passwd | cut -d: -f6)
     if [ ! -f /var/cpanel/users/$user ]; then
-        echo "[permission] ${yellow}$user${normal} user file missing, likely an invalid user."
+        _msg "[$1] ${Yellow}$user${Normal} user file missing, likely an invalid user."
     elif [ "$HOMEDIR" == "" ]; then
-        echo "[permission] Couldn't determine home directory for ${yellow}$user${normal}."
+        _msg "[$1] Couldn't determine home directory for ${Yellow}$user${Normal}."
     else
-        echo "[permission] Setting ownership for user ${yellow}$user${normal}."
+        _msg "[$1] Setting ownership for user ${Yellow}$user${Normal}."
         chown -R $user:$user $HOMEDIR
         chmod 711 $HOMEDIR
         chown $user:nobody $HOMEDIR/public_html $HOMEDIR/.htpasswds
         chown $user:mail $HOMEDIR/etc $HOMEDIR/etc/*/shadow $HOMEDIR/etc/*/passwd
-        echo "[permission] Setting permissions for user ${yellow}$ACCOUNT${normal}."
+        _msg "[$1] Setting permissions for user ${Yellow}$ACCOUNT${Normal}."
         find $HOMEDIR -type f -exec chmod 644 {} \;
         find $HOMEDIR -type d -exec chmod 755 {} \;
         find $HOMEDIR -type d -name cgi-bin -exec chmod 755 {} \;

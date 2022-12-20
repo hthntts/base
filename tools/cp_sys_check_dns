@@ -3,13 +3,13 @@
 # Arguments:
 set -e
 
-_tool _cpanel
+_tool _cp
 
-TEMP_MX=/tmp/${HOSTNAME}-${TEMPTEMP}-system-check-MX.csv
-TEMP_DOMAIN=/tmp/${HOSTNAME}-${TEMPTEMP}-system-check-dns.txt
+local TXT_MXR=/tmp/${HOSTNAME}-${FDAY}-system-check-mxr.csv
+local TXT_DNS=/tmp/${HOSTNAME}-${FDAY}-system-check-dns.txt
 
->${TEMP_MX}
-awk -F ": " '{print $1}' /etc/userdomains | sed '/: nobody/d' | grep -v salehost >$TEMP_DOMAIN
+>${TXT_MXR}
+awk -F ": " '{print $1}' /etc/userdomains | sed '/: nobody/d' | grep -v salehost >$TXT_DNS
 while read domain; do
     NS=$(dig NS $domain +short | awk 'NR == 1 {print $1}')
     MX=$(dig MX $domain +short | awk 'NR == 1 {print $2}')
@@ -18,7 +18,7 @@ while read domain; do
     else
         IP=$(dig $MX +short | awk 'NR == 1 {print $1}')
     fi
-    echo -e "$domain,$MX,$IP,$NS" >>${TEMP_MX}
-done <$TEMP_DOMAIN
+    echo -e "$domain,$MX,$IP,$NS" >>${TXT_MXR}
+done <$TXT_DNS
 
-_run "[dns] File ${yellow}${TEMP_MX}${normal}." cat $TEMP_MX
+_run "[$1] File ${Yellow}${TXT_MXR}${Normal}." cat $TXT_MXR

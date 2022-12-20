@@ -1,25 +1,25 @@
 #!/bin/bash
-# Description: cPanel Account Change Pass [All] *
-# Arguments: --domain=cP_DOMAIN
+# Description: cPanel Account Change Pass [All]
+# Arguments: --domain=DOMAIN
 set -e
 
-_tool _cpanel
-_domain ${cP_DOMAIN}
-ACCOUNT=${account}
+_tool _cp
+_domain ${DOMAIN}
+local ACCOUNT=${account}
+local TXT=/tmp/${DOMAIN}-${FDAY}-account-change-pass-all.txt
+>${TXT}
 
-TEMP_PASS=/tmp/${cP_DOMAIN}-${TEMPTEMP}-account-change-pass-all-email.txt
->${TEMP_PASS}
-PATH_SHADOW=/home/${ACCOUNT}/etc/${cP_DOMAIN}/shadow
+PATH_SHADOW=/home/${ACCOUNT}/etc/${DOMAIN}/shadow
 
-_run "[email] Backup File Shadow ${yellow}${PATH_SHADOW}.${TEMPTEMP}${normal}" cp ${PATH_SHADOW}{,.${TEMPTEMP}}
-_run "[email] Create Email Temp ${yellow}${TEMPTEMP}@${cP_DOMAIN}${normal}" uapi --user=${ACCOUNT} Email add_pop email=${TEMPTEMP} password=$PASS quota=0 domain=$cP_DOMAIN skip_update_db=1
+_run "[$1] Backup File Shadow ${Yellow}${PATH_SHADOW}.${FDAY}${Normal}" cp ${PATH_SHADOW}{,.${FDAY}}
+_run "[$1] Create Email Temp ${Yellow}${FDAY}@${DOMAIN}${Normal}" uapi --user=${ACCOUNT} Email add_pop email=${FDAY} password=$PASSWORD quota=0 domain=$DOMAIN skip_update_db=1
 
-LISTS=$(cat /home/${ACCOUNT}/etc/${cP_DOMAIN}/shadow | cut -d':' -f1 | sed '/${TEMPTEMP}/d')
+LISTS=$(cat /home/${ACCOUNT}/etc/${DOMAIN}/shadow | cut -d':' -f1 | sed '/${FDAY}/d')
 for i in $(echo ${LISTS}); do
-    TEMP=$(cat /home/${ACCOUNT}/etc/${cP_DOMAIN}/shadow | grep ${TEMPTEMP} | sed 's/'${TEMPTEMP}'://g')
-    echo "$i:$TEMP" >>${TEMP_PASS}
+    local TEMP=$(cat /home/${ACCOUNT}/etc/${DOMAIN}/shadow | grep ${FDAY} | sed 's/'${FDAY}'://g')
+    echo "$i:$TEMP" >>${TXT}
 done
 
-echo "[email] Password All Email ${yellow}${PASS}${normal} ... ${green}done.${normal}"
-cat ${TEMP_PASS} >$PATH_SHADOW
-_run "[email] Delete Email Temp ${yellow}${TEMPTEMP}@${cP_DOMAIN}${normal}" uapi --user=${ACCOUNT} Email delete_pop email=${TEMPTEMP} domain=$cP_DOMAIN
+_msg "[$1] Password All Email ${Yellow}${PASSWORD}${Normal} ${Blue}-->${Normal} ${Color01}Done${Normal}"
+cat ${TXT} >$PATH_SHADOW
+_run "[$1] Delete Email Temp ${Yellow}${FDAY}@${DOMAIN}${Normal}" uapi --user=${ACCOUNT} Email delete_pop email=${FDAY} domain=$DOMAIN

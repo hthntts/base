@@ -1,10 +1,10 @@
 #!/bin/bash
 # Description: cPanel Account IPv6 Enable
-# Arguments: --domain=cP_DOMAIN
+# Arguments: --domain=DOMAIN
 set -e
 
-_tool _cpanel
-_domain ${cP_DOMAIN}
-ACCOUNT=${account}
+_tool _cp
+_domain ${DOMAIN}
+local ACCOUNT=${account}
 
-_run "[ipv6] Enable IPv6 of ${yellow}${cP_DOMAIN}${normal}" whmapi1 --output=jsonpretty ipv6_enable_account user=$ACCOUNT range='SHARED'
+_run "[$1] Enable IPv6 of ${Yellow}${DOMAIN}${Normal}" whmapi1 --output=jsonpretty ipv6_enable_account user=$ACCOUNT range='SHARED'

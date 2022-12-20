@@ -1,14 +1,15 @@
 #!/bin/bash
-# Description: Test Description
-# Arguments: Test Arguments
-set -Eeo pipefail
+# Description: Demo Description
+# Arguments:
+set -e
 
-[[ -z "${DOMAIN:-}" ]] && _die "[${Red}Missing${Normal}] ${Yellow}DOMAIN${Normal} --> ${Blue}Is Empty${Normal}"
+_tool _cp
+_domain ${DOMAIN}
+local ACCOUNT=${account}
 
-while true; do
-    _msg "${Darkgray}Test${Normal}"
-    sleep 1
-done
+# while true; do
+#     _msg "${Darkgray}Test${Normal}"
+#     sleep 1
+# done
 
-_msg "${Green}Xin ${Bold}Chào${Normal}"
-_run "[$1] List folder" ls -all
+_run "[$1] ls -all" ls -all

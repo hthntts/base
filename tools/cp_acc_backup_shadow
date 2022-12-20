@@ -1,12 +1,12 @@
 #!/bin/bash
-# Description: cPanel Account Backup Shadow *
-# Arguments: --domain=cP_DOMAIN
+# Description: cPanel Account Backup Shadow
+# Arguments: --domain=DOMAIN
 set -e
 
-_tool _cpanel
-_domain ${cP_DOMAIN}
-ACCOUNT=${account}
+_tool _cp
+_domain ${DOMAIN}
+local ACCOUNT=${account}
 
-PATH_SHADOW=/home/${ACCOUNT}/etc/${cP_DOMAIN}/shadow
+PATH_SHADOW=/home/${ACCOUNT}/etc/${DOMAIN}/shadow
 
-_run "[shadow] Backup File Shadow ${yellow}${PATH_SHADOW}.${TEMPTEMP}${normal}" cp ${PATH_SHADOW}{,.${TEMPTEMP}}
+_run "[$1] File ${Yellow}${PATH_SHADOW}.${FDAY}${Normal}" cp ${PATH_SHADOW}{,.${FDAY}}

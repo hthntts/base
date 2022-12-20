@@ -3,12 +3,12 @@
 # Arguments:
 set -e
 
-_tool _cpanel
+_tool _cp
 
-TEMP_2_INDENTITIES=/tmp/${HOSTNAME}-${TEMPTEMP}-system-fix-2-indentities.txt
+local TXT=/tmp/${HOSTNAME}-${FDAY}-system-fix-2-indentities.txt
 
-ls -1A /home/*/etc/*/*.rcube.db >${TEMP_2_INDENTITIES}
+ls -1A /home/*/etc/*/*.rcube.db >${TXT}
 while read list; do
-    _run "[fix] Backup ${yellow}${list}.${TEMPTEMP}${normal}" cp $list{,.${TEMPTEMP}}
-    _run "[fix] Fix DB ${yellow}${list}${normal}" sqlite3 $list 'DELETE FROM identities WHERE identity_id = 2;'
-done <${TEMP_2_INDENTITIES}
+    _run "[$1] Backup ${Yellow}${list}.${FDAY}${normal}" cp $list{,.${FDAY}}
+    _run "[$1] Fix DB ${Yellow}${list}${Normal}" sqlite3 $list 'DELETE FROM identities WHERE identity_id = 2;'
+done <${TXT}

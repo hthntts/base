@@ -3,14 +3,14 @@
 # Arguments:
 set -e
 
-_tool _cpanel
+_tool _cp
 
-TEMP_ALLEMAIL=/tmp/${HOSTNAME}-${TEMPTEMP}-system-fix-dovecot-utf8-all-email.txt
+local TXT=/tmp/${HOSTNAME}-${FDAY}-system-fix-dovecot-utf8-all.txt
 
-ls -all /home/*/mail/*/*/subscriptions | awk -F"/" '{ print $6,$5 }' | sed s/\ /\@/g >${TEMP_ALLEMAIL}
+ls -all /home/*/mail/*/*/subscriptions | awk -F"/" '{ print $6,$5 }' | sed s/\ /\@/g >${TXT}
 while read list; do
     echo $list
-    ./cp_dovecot_fix_utf8 $list
-done <${TEMP_ALLEMAIL}
+    ./cp_email_fix_dovecot_utf8 $list
+done <${TXT}
 
-_run "[dovecot] File ${yellow}${TEMP_ALLEMAIL}${normal}." cat ${TEMPALLEMAIL}
+_msg "[$1] File ${Yellow}${TXT}${Normal}"

@@ -1,25 +1,21 @@
 #!/bin/bash
-# Description: cPanel Account Fix Unlink [All] *
-# Arguments: --domain=cP_DOMAIN
+# Description: cPanel Account Fix Unlink [All]
+# Arguments: --domain=DOMAIN
 set -e
 
-_tool _cpanel
-_domain ${cP_DOMAIN}
-ACCOUNT=${account}
+_tool _cp
+_domain ${DOMAIN}
+local ACCOUNT=${account}
+local TXT=/tmp/${HOSTNAME}-${FDAY}-account-fix-unlink-all.txt
 
-TEMP_UNLINK_ALLEMAIL_ACCOUNT=/tmp/${HOSTNAME}-${TEMPTEMP}-system-fix-unlink-all-email.txt
+ls -all /home/${ACCOUNT}/mail/ | awk '$9 ~ /@/' | awk '{print $9, $11;}' | cut -d'/' -f1 >${TXT}
 
-ls -all /home/${ACCOUNT}/mail/ | awk '$9 ~ /@/' | awk '{print $9, $11;}' | cut -d'/' -f1 >${TEMP_UNLINK_ALLEMAIL_ACCOUNT}
-
-cat ${TEMP_UNLINK_ALLEMAIL_ACCOUNT} | while read Email Domain; do
-    Account=$(/scripts/whoowns ${cP_DOMAIN})
+cat ${TXT} | while read Email Domain; do
+    Account=$(/scripts/whoowns ${DOMAIN})
     DIR=/home/${Account}/mail/
 
     if [ -d "${DIR}" ]; then
         cd ${DIR}
-        _run "[unlink] unlink ${yellow}${Email}${normal}" unlink $Email
-    else
-        echo "[unlink] ${yellow}${Email}${normal} ${red}does not exist${normal}."
-        exit 1
+        _run "[$1] unlink ${Yellow}${Email}${Normal}" unlink $Email
     fi
 done

@@ -13,8 +13,8 @@ local NAME=".tmux.conf"
 local FILE=${HOME}/${NAME}
 
 if [ -f ${FILE} ]; then
-    echo "[tmux] File ~/${NAME} found ... ${yellow}skipping${normal}"
+    _msg "[$1] File ~/${NAME} found ... ${Yellow}skipping${Normal}"
 else
-    echo "[tmux] File ~/${NAME} not found"
-    _run "[tmux] Add config tmux ~/${NAME}" _tmux_config ${FILE}
+    _msg "[$1] File ~/${NAME} not found"
+    _run "[$1] Add config tmux ~/${NAME}" _tmux_config ${FILE}
 fi

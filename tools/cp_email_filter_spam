@@ -1,15 +1,14 @@
 #!/bin/bash
 # Description: cPanel Email Filter [SPAM]
-# Arguments: --email=cP_EMAIL
+# Arguments: --email=EMAIL
 set -e
 
-_tool _cpanel
-_check ${cP_EMAIL}
+_tool _cp
 
-User="$(echo "${cP_EMAIL}" | cut -d'@' -f1)"
-Domain="$(echo "${cP_EMAIL}" | cut -d'@' -f2)"
+User="$(echo "${EMAIL}" | cut -d'@' -f1)"
+Domain="$(echo "${EMAIL}" | cut -d'@' -f2)"
 
 _domain ${Domain}
-ACCOUNT=${account}
+local ACCOUNT=${account}
 
-_run "[filter] Config Filter Email ${yellow}$Email${normal} Move Subject [SPAM] To Junk." uapi --user=$ACCOUNT Email store_filter filtername="Move Subject [SPAM] To Junk" account=$Email action1=save dest1=$home/mail/$Domain/$User/.Junk part1=\$header_subject: match1=matches val1="^\[SPAM]" opt1=or
+_run "[$1] Filter ${Yellow}$EMAIL${Normal} -- Move Subject [SPAM] To Junk" uapi --user=$ACCOUNT Email store_filter filtername="Move Subject [SPAM] To Junk" account=$EMAIL action1=save dest1=$home/mail/$Domain/$User/.Junk part1=\$header_subject: match1=matches val1="^\[SPAM]" opt1=or
