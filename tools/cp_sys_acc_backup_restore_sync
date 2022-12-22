@@ -1,0 +1,41 @@
+#!/bin/bash
+# Description: cPanel System Account Backup Restore Sync
+# Arguments:
+set -e
+
+_tool _cp
+[[ -z "${SERVER:-}" ]] && _die "${Yellow}SERVER${Normal} ${Blue}-->${Normal} ${Red}does not exist${Normal}." # SERVER
+local SSH_OPTION='-oStrictHostKeyChecking=no -oCheckHostIP=no'
+
+sync_data() {
+    local ACCOUNT=$1
+    local SERVER=$2
+    _msg "[${Yellow}${ACCOUNT}${Normal}] Rsync ${Yellow}${SERVER}${Normal}" rsync -av -e "ssh -p1797 ${SSH_OPTION}" /home/${ACCOUNT}/ ${SERVER}:/home/${ACCOUNT}/
+}
+
+backup_restore_sync() {
+    local DOMAIN=$1
+    _domain ${DOMAIN}
+    local ACCOUNT=${account}
+    local SERVER=$2
+
+    _msg "[${Yellow}${ACCOUNT}${Normal}] Backup" /scripts/pkgacct ${ACCOUNT} --backup --skiplogs "/home/${ACCOUNT}/"
+    _msg "[${Yellow}${ACCOUNT}${Normal}] Copy to ${Yellow}${SERVER}${Normal}" scp -P1797 ${SSH_OPTION} /home/${ACCOUNT}/${ACCOUNT}.tar.gz ${SERVER}:/home/
+    _msg "[${Yellow}${ACCOUNT}${Normal}] Restore on ${Yellow}${SERVER}${Normal}" ssh -p1797 ${SSH_OPTION} ${SERVER} "/scripts/restorepkg --force /home/${ACCOUNT}.tar.gz"
+    sync_data ${ACCOUNT} ${SERVER}
+}
+
+backup_restore_sync_all() {
+    local TXT=/tmp/${HOSTNAME}-${FDAY}-sync-all.txt
+    local count=1
+    cut -f "1" -d : /etc/trueuserdomains >${TXT}
+    local totaldomain=$(cat ${TXT} | wc -l)
+    echo -e "Total Domain: ${Yellow}$totaldomain${Normal}"
+    for DOMAIN in $(cut -f "1" -d : /etc/trueuserdomains); do
+        count=$(($count + 1))
+        echo -e "${Yellow}$count${Normal}/${Green}$totaldomain${Normal} ${Yellow}${DOMAIN}${Normal} >> ${Green}$1${Normal} <<"
+        backup_restore_sync ${DOMAIN} $1
+    done
+}
+
+backup_restore_sync_all ${SERVER}
