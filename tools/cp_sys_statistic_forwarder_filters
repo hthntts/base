@@ -1,0 +1,65 @@
+#!/bin/bash
+# Description: cPanel System Statistic Forwarder Filters
+# Arguments:
+set -e
+
+_tool _cp
+local TXT=/tmp/${HOSTNAME}-${FDAY}-mailbox.txt
+local TXT_ALL=/tmp/${HOSTNAME}-${FDAY}-mailbox-all.txt
+
+local count=1
+sed "s|:||g" /etc/userdomains | awk '!/^\* nobody/{print $1, $2 | "sort | uniq" }' >${TXT}
+local totalaccount=$(cat ${TXT} | wc -l)
+echo "Total Accounts: $totalaccount" >>${TXT_ALL}
+
+cat ${TXT} | while read DOMAIN ACCOUNT; do
+    _msg "[$1] - (${Yellow}$count${Normal}/${Green}$totalaccount${Normal}) (${ACCOUNT}) (${DOMAIN})"
+    # Define
+    count=$(($count + 1))
+    ls -d /home/$ACCOUNT/mail/$DOMAIN/*/ | awk 'BEGIN {
+        }
+        {
+        tcmd = "test -d " $1
+        if(!system(tcmd)){
+        split($1,MyArray,"/")
+        print MyArray[6] "@" MyArray[5]
+        }
+        }
+        ' >${TXT}
+
+    # Statistic
+    ## Count Forwarders
+    FORWARDERS_TOTAL=$(uapi --output=jsonpretty --user=$ACCOUNT Email count_forwarders | jq -r '.result.data')
+
+    ## Count Email Filter
+    EMAIL_FILTER_TOTAL=$(find /home/$ACCOUNT/etc/$DOMAIN/ -name '*yaml' | wc -l)
+
+    ## Count Global Filter
+    GLOBAL_FILTER_TOTAL=$(uapi --output=jsonpretty --user=$ACCOUNT Email count_filters | jq -r '.result.data')
+
+    ## Show Statistic
+    echo "[${DOMAIN}] Total Forwarders: $FORWARDERS_TOTAL" >>${TXT_ALL}
+    echo "[${DOMAIN}] Total Global Filter: $GLOBAL_FILTER_TOTAL" >>${TXT_ALL}
+    echo "[${DOMAIN}] Total Email Filter: $EMAIL_FILTER_TOTAL" >>${TXT_ALL}
+
+    # List Email Forwarders
+    if [ $FORWARDERS_TOTAL != 0 ]; then
+        echo "[$DOMAIN] Email Forwarders $DOMAIN" >>${TXT_ALL}
+        cat ${TXT} | while read email; do
+            sed "s|:| ->|g" /etc/valiases/$DOMAIN | awk '$1 ~ /^'$email'/ && !/autorespond/' | sed "s/^/[${DOMAIN}] Email Forwarders | /" >>${TXT_ALL}
+        done
+    fi
+
+    # List Email Filters
+    if [ $EMAIL_FILTER_TOTAL != 0 ]; then
+        echo "[$DOMAIN] Email Filters $DOMAIN" >>${TXT_ALL}
+        cat ${TXT} | while read email; do
+            uapi --user=$ACCOUNT Email list_filters ACCOUNT=$email | awk '$1 ~ /^'dest'/ && !/INBOX/ {print $2}' | while read delivery; do
+                echo "[$DOMAIN] Email Filters | $email -> $delivery" >>${TXT_ALL}
+            done
+        done
+    fi
+done
+
+_msg "[$1] File: ${Yellow}${TXT_ALL}${Normal}"
+_msg "[$1] File: ${Yellow}${TXT}${Normal}"
