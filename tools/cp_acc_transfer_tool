@@ -1,0 +1,23 @@
+#!/bin/bash
+# Description: cPanel Account Transfer Tool
+# Arguments: --domain=DOMAIN
+set -e
+
+_tool _cp
+_domain ${DOMAIN}
+local ACCOUNT=${account}
+
+[[ -z "${IP_TRANSFER:-}" ]] && _die "${Yellow}IP_TRANSFER${Normal} ${Blue}-->${Normal} ${Red}does not exist${Normal}." # IP_TRANSFER
+
+_msg "[$1] Create Remote Root User Transfer Session (${Yellow}$IP_TRANSFER${Normal})"
+local ID_SESSION=$(whmapi1 create_remote_root_transfer_session remote_server_type=cpanel host=$IP_TRANSFER port=1797 user=root sshkey_name=id_rsa transfer_threads=1 restore_threads=1 unrestricted_restore=1 copy_reseller_privs=0 compressed=0 unencrypted=0 low_priority=0 | grep transfer_session_id | sed 's/://g' | awk '{print $IP_TRANSFER}')
+_msg "[$1] Transfer session id: ${Yellow}$ID_SESSION${Normal}"
+_msg "[$1] Enqueue Transfer Item"
+whmapi1 enqueue_transfer_item module=AccountRemoteRoot user=$ACCOUNT localuser=$ACCOUNT transfer_session_id=$ID_SESSION
+_msg "[$1] Start Transfer Session"
+whmapi1 start_transfer_session transfer_session_id=$ID_SESSION
+_msg "[$1] Get Transfer Session State"
+/usr/local/cpanel/bin/view_transfer $ID_SESSION | grep MASTER
+
+# Test
+# whmapi1 --output=jsonpretty abort_transfer_session transfer_session_id=$ID_SESSION
