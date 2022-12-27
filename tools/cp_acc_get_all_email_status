@@ -1,0 +1,26 @@
+#!/bin/bash
+# Description: cPanel Account Get All Email
+# Arguments: --domain=DOMAIN
+set -e
+
+_tool _cp
+_domain ${DOMAIN}
+local ACCOUNT=${account}
+local TXT=/tmp/${DOMAIN}-${FDAY}-account-get-all-email-status.txt
+local TXT2=/tmp/${DOMAIN}-${FDAY}-account-get-all-email-status-2.txt
+echo "Email Status Suspended Hold" >${TXT2}
+
+uapi --output=jsonpretty --user=${ACCOUNT} Email list_pops no_validate=0 skip_main=1 | jq -r '.result.data[].email' >${TXT}
+cat ${TXT} | while read email; do
+    if grep -q "${email}" "/etc/outgoing_mail_suspended_users"; then
+        echo "$email No Yes No" >>${TXT2}
+    elif grep -q "${email}" "/etc/outgoing_mail_hold_users"; then
+        echo "$email No No Yes" >>${TXT2}
+    else
+        echo "$email OK No No" >>${TXT2}
+    fi
+done
+
+_msg "[$1] ------ Email: ${Yellow}$TXT${Normal} ${Blue}-->${Normal} ${Green}Done${Normal}"
+_msg "[$1] .Total Email: ${Yellow}$(cat ${TXT} | wc -l)${Normal}"
+_msg "[$1] Status Email: ${Yellow}$TXT2${Normal} ${Blue}-->${Normal} ${Green}Done${Normal}"
