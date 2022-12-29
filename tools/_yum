@@ -8,9 +8,9 @@ function _yum {
         if [ -z "$__yum_updated" ]; then
             _yum_update
         fi
-        _run "[yum] Install $pkg" sudo yum install -y $1
+        _run "[yum] Install ${Yellow}$pkg${Normal}" sudo yum install -y $1
     else
-        echo "[yum] $pkg is already installed, skipping."
+        echo "[yum] ${Yellow}$pkg${Normal} is already installed, skipping."
     fi
 }
 

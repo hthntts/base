@@ -8,6 +8,7 @@ _tool _yum
 function _install {
     case $_DISTRO_BASE in
         ubuntu)
+            [ -z $2 ] || _ppa $2
             _apt $1
             ;;
         centos)
