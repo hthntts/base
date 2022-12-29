@@ -8,6 +8,7 @@ function _bash_aliases {
 alias ls="ls --color -h --group-directories-first"
 alias ll="ls --color -l -h --group-directories-first"
 alias lla="ll -a"
+alias sysrun="systemctl | head -1; systemctl | grep running"
 EOF
 }
 

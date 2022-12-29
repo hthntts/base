@@ -1,5 +1,5 @@
 #!/bin/bash
-# Description: cPanel Account Get All Email
+# Description: cPanel Account Get All Email Status
 # Arguments: --domain=DOMAIN
 set -e
 
