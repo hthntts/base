@@ -12,6 +12,6 @@ function _git {
     if ! test -d "$dest"; then
         _run "[git] Clone ${Yellow}$repo${Normal} to ${Yellow}$dest${Normal}" git clone --recursive $1 $2
     else
-        echo "[git] ${Yellow}$dest${Normal} already exists, skipping."
+        echo -e "[git] ${Yellow}$dest${Normal} already exists, skipping."
     fi
 }

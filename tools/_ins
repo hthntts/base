@@ -2,16 +2,15 @@
 # Description: Package Manager
 set -Ee
 
-_tool _apt
-_tool _yum
-
 function _install {
     case $_DISTRO_BASE in
         ubuntu)
+            _tool _apt
             [ -z $2 ] || _ppa $2
             _apt $1
             ;;
         centos)
+            _tool _yum
             _yum $1
             ;;
         *)
@@ -23,9 +22,11 @@ function _install {
 function _update {
     case $_DISTRO_BASE in
         ubuntu)
+            _tool _apt
             _apt_update
             ;;
         centos)
+            _tool _yum
             _yum_update
             ;;
         *)
