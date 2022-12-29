@@ -160,7 +160,7 @@ _PLATFORM=$(uname -s | awk '{print tolower($1)}')
 
 case $_PLATFORM in
     linux)
-        _DISTRO=$(awk -F '"' '/^ID=/ {print tolower($2)}' /etc/[A-Za-z]*[_-][rv]e[lr]*)
+        _DISTRO=$(awk -F '=' '/^ID=/ {print tolower($2)}' /etc/[A-Za-z]*[_-][rv]e[lr]*)
         _DISTRO_VER=$(awk -F '"' '/^VERSION=/ {print tolower($2)}' /etc/[A-Za-z]*[_-][rv]e[lr]*)
         _DISTRO_VER_ID=$(awk -F '"' '/^VERSION_ID=/ {print tolower($2)}' /etc/[A-Za-z]*[_-][rv]e[lr]*)
         _DISTRO_BASE=$(awk -F '=' '/^ID_LIKE=/ {print tolower($2)}' /etc/[A-Za-z]*[_-][rv]e[lr]*)
