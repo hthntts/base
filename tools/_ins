@@ -1,0 +1,34 @@
+#!/bin/bash
+# Description: Package Manager
+set -Ee
+
+_tool _apt
+_tool _yum
+
+function _install {
+    case $_DISTRO_BASE in
+        ubuntu)
+            _apt $1
+            ;;
+        centos)
+            _yum $1
+            ;;
+        *)
+            exit_with_error
+            ;;
+    esac
+}
+
+function _update {
+    case $_DISTRO_BASE in
+        ubuntu)
+            _apt_update
+            ;;
+        centos)
+            _yum_update
+            ;;
+        *)
+            exit_with_error
+            ;;
+    esac
+}

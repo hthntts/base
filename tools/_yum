@@ -1,0 +1,20 @@
+#!/bin/bash
+# Description: REHL Package Manager
+set -e
+
+function _yum {
+    local pkg=$1
+    if ! dpkg -s $pkg >/dev/null 2>&1; then
+        if [ -z "$__yum_updated" ]; then
+            _yum_update
+        fi
+        _run "[yum] Install $pkg" sudo yum install -y $1
+    else
+        echo "[yum] $pkg is already installed, skipping."
+    fi
+}
+
+function _yum_update {
+    _run "[yum] Update YUM" sudo yum -y update
+    __yum_updated=yes
+}
