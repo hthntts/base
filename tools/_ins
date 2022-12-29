@@ -3,7 +3,7 @@
 set -Ee
 
 function _install {
-    case $_DISTRO_BASE in
+    case $_DISTRO in
         ubuntu)
             _tool _apt
             [ -z $2 ] || _ppa $2
@@ -20,7 +20,7 @@ function _install {
 }
 
 function _update {
-    case $_DISTRO_BASE in
+    case $_DISTRO in
         ubuntu)
             _tool _apt
             _apt_update
