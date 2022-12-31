@@ -1,0 +1,20 @@
+#!/bin/bash
+# Description: Linux UFW (Firewall)
+set -e
+
+if [ -z ${_SSH_PORT} ]; then
+    _SSH_PORT=22
+fi
+
+UFW_IPV4='to 0.0.0.0/0'
+
+if command -v ufw; then
+    _msg "[$1] Command ${Yellow}ufw${Normal} already installed, skipping."
+else
+    _msg "[$1] Command ${Yellow}ufw${Normal} does not exist."
+    exit_with_error
+fi
+
+function _ufw_add {
+    _msg "[$1] UFW Allow ${Yellow}$1${Normal} $2" ufw allow $UFW_IPV4 port $1 comment "$2"
+}
