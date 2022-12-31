@@ -8,13 +8,33 @@ fi
 
 UFW_IPV4='to 0.0.0.0/0'
 
+if command -v csf; then
+    echo -e "[ufw] ${Yellow}csf${Normal} is already installed, skipping."
+    exit_with_error
+fi
+
+if command -v imunify360-agent; then
+    echo -e "[ufw] ${Yellow}imunify360${Normal} is already installed, skipping."
+    exit_with_error
+fi
+
+if command -v iptables; then
+    _run "[ufw] Stop ${Yellow}iptables${Normal}" systemctl stop iptables
+    _run "[ufw] Disable ${Yellow}iptables${Normal}" systemctl disable iptables
+fi
+
+if command -v firewall-cmd; then
+    _run "[ufw] Stop ${Yellow}firewalld${Normal}" systemctl stop firewalld
+    _run "[ufw] Disable ${Yellow}firewalld${Normal}" systemctl disable firewalld
+fi
+
 if command -v ufw; then
-    _msg "[$1] Command ${Yellow}ufw${Normal} already installed, skipping."
+    _msg "[ufw] Command ${Yellow}ufw${Normal} ${Blue}-->${Normal} ${Yellow}OK${Normal}"
 else
-    _msg "[$1] Command ${Yellow}ufw${Normal} does not exist."
+    _msg "[ufw] Command ${Yellow}ufw${Normal} does not exist."
     exit_with_error
 fi
 
 function _ufw_add {
-    _msg "[$1] UFW Allow ${Yellow}$1${Normal} $2" ufw allow $UFW_IPV4 port $1 comment "$2"
+    _msg "[ufw] UFW Allow ${Yellow}$1${Normal} $2" ufw allow $UFW_IPV4 port $1 comment "$2"
 }
