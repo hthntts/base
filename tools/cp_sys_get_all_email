@@ -5,7 +5,7 @@ set -e
 
 _tool _cpanel
 
-local TXT=/tmp/${HOSTNAME}-${TEMPTEMP}-system-get-all-email.txt
+local TXT=/tmp/${HOSTNAME}-${FDAY}-system-get-all-email.txt
 >$TXT
 
 CP_ACCOUNTS=$(ls -1A /var/cpanel/users/)
