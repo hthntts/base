@@ -1,0 +1,8 @@
+#!/bin/bash
+# Description: Linux UFW (Firewall)
+# Arguments:
+set -e
+
+_tool _ufw
+
+_ufw_add $_SSH_PORT "SSH"

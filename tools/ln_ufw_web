@@ -1,0 +1,20 @@
+#!/bin/bash
+# Description: Linux UFW (Firewall) Web
+# Arguments:
+set -e
+
+_tool _ufw
+
+readonly __web=(
+    "80|WEB"
+    "443|WEB-SSL")
+
+function _port_web() {
+    local port comment
+    for fields in ${__web[@]}; do
+        IFS=$'|' read -r port comment <<<"$fields"
+        _ufw_add $port $comment
+    done
+}
+
+_port_web

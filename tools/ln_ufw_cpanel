@@ -1,0 +1,28 @@
+#!/bin/bash
+# Description: Linux UFW (Firewall) cPanel
+# Arguments:
+set -e
+
+_tool _ufw
+
+readonly __cpanel=(
+    "2077|WebDAV"
+    "2078|WebDAV-SSL"
+    "2079|CalDAV-CardDAV"
+    "2080|CalDAV-CardDAV-SSL"
+    "2082|cPanel"
+    "2083|cPanel-SSL"
+    "2095|cPanel-Webmail"
+    "2096|cPanel-Webmail-SSL"
+    "2087|cPanel-WHM"
+    "2089|cPanel-License")
+
+function _port_cpanel() {
+    local port comment
+    for fields in ${__cpanel[@]}; do
+        IFS=$'|' read -r port comment <<<"$fields"
+        _ufw_add $port $comment
+    done
+}
+
+_port_cpanel

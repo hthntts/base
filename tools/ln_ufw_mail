@@ -1,0 +1,25 @@
+#!/bin/bash
+# Description: Linux UFW (Firewall) Email
+# Arguments:
+set -e
+
+_tool _ufw
+
+readonly __mail=(
+    "25|SMTP"
+    "465|SMTP-SSL"
+    "587|SMTP-TLS"
+    "110|POP3"
+    "995|POP3-SSL"
+    "143|IMAP"
+    "993|IMAP-SSL")
+
+function _port_mail() {
+    local port comment
+    for fields in ${__mail[@]}; do
+        IFS=$'|' read -r port comment <<<"$fields"
+        _ufw_add $port $comment
+    done
+}
+
+_port_mail
