@@ -30,10 +30,10 @@ backup_restore_sync_all() {
     local count=1
     cut -f "1" -d : /etc/trueuserdomains >${TXT}
     local totaldomain=$(cat ${TXT} | wc -l)
-    echo -e "Total Domain: ${Yellow}$totaldomain${Normal}"
+    _msg "Total Domain: ${Yellow}$totaldomain${Normal}"
     for DOMAIN in $(cut -f "1" -d : /etc/trueuserdomains); do
         count=$(($count + 1))
-        echo -e "${Yellow}$count${Normal}/${Green}$totaldomain${Normal} ${Yellow}${DOMAIN}${Normal} >> ${Green}$1${Normal} <<"
+        _msg "${Yellow}$count${Normal}/${Green}$totaldomain${Normal} ${Yellow}${DOMAIN}${Normal} >> ${Green}$1${Normal} <<"
         backup_restore_sync ${DOMAIN} $1
     done
 }

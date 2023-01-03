@@ -9,12 +9,12 @@ fi
 UFW_IPV4='to 0.0.0.0/0'
 
 if command -v csf; then
-    echo -e "[ufw] ${Yellow}csf${Normal} is already installed, skipping."
+    _msg "[ufw] ${Yellow}csf${Normal} is already installed, skipping."
     exit_with_error
 fi
 
 if command -v imunify360-agent; then
-    echo -e "[ufw] ${Yellow}imunify360${Normal} is already installed, skipping."
+    _msg "[ufw] ${Yellow}imunify360${Normal} is already installed, skipping."
     exit_with_error
 fi
 

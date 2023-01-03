@@ -10,7 +10,7 @@ function _apt {
         fi
         _run "[apt] Install ${Yellow}$pkg${Normal}" sudo apt-get install -y $1
     else
-        echo -e "[apt] ${Yellow}$pkg${Normal} is already installed, skipping."
+        _msg "[apt] ${Yellow}$pkg${Normal} is already installed, skipping."
     fi
 }
 
@@ -32,7 +32,7 @@ function _dpkg {
         _run "[dpkg] Installing ${Yellow}$pkg${Normal}" sudo dpkg -i "$download/$pkg.deb"
         rm -rf "$download"
     else
-        echo -e "[dpkg] ${Yellow}$pkg${Normal} is already installed, skipping."
+        _msg "[dpkg] ${Yellow}$pkg${Normal} is already installed, skipping."
     fi
 }
 

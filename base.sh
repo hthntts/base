@@ -83,6 +83,7 @@ function _tool {
     source "./${tool}"
     popd >/dev/null
     unset 'STACK[${#STACK[@]}-1]'
+    # echo -e "${Dim}-- Tool [${STACK[@]}]${Normal}"
 }
 
 while [[ $# -gt 0 ]]; do

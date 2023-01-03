@@ -12,6 +12,6 @@ function _git {
     if ! test -d "$dest"; then
         _run "[$1] Clone ${Yellow}$repo${Normal} to ${Yellow}$dest${Normal}" git clone --recursive $1 $2
     else
-        echo -e "[$1] ${Yellow}$dest${Normal} already installed, skipping."
+        _msg "[$1] ${Yellow}$dest${Normal} already installed, skipping."
     fi
 }

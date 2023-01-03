@@ -10,7 +10,7 @@ function _yum {
         fi
         _run "[yum] Install ${Yellow}$pkg${Normal}" sudo yum install -y $1
     else
-        echo -e "[yum] ${Yellow}$pkg${Normal} is already installed, skipping."
+        _msg "[yum] ${Yellow}$pkg${Normal} is already installed, skipping."
     fi
 }
 
