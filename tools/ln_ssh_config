@@ -17,7 +17,7 @@ if [ -z ${_SSH_CONFIG} ]; then
     _msg "[$1] Port ${Yellow}3090${Normal} is unused"
     _run "[$1] File ${Yellow}${_SSH_CONFIG_PATH}.${FDAY}${Normal}" cp ${_SSH_CONFIG_PATH}{,.${FDAY}}
     _run "[$1] Config SSH Port 3090" awk -i inplace '/Port / {gsub("^.*","Port 3090", $0)}1' /etc/ssh/sshd_config
-    _run "[$1] Restart service SSH" systemctl status sshd
+    _run "[$1] Restart service SSH" systemctl restart sshd
 else
     _msg "[$1] Port ${Yellow}3309${Normal} is already used, skipping"
     exit_with_error
