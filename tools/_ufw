@@ -36,5 +36,5 @@ else
 fi
 
 function _ufw_add {
-    _msg "[ufw] UFW Allow ${Yellow}$1${Normal} $2" ufw allow $UFW_IPV4 port $1 comment "$2"
+    _run "[ufw] UFW Allow ${Yellow}$1${Normal} $2" ufw allow $UFW_IPV4 port $1 comment "$2"
 }

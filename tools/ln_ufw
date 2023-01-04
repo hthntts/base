@@ -5,4 +5,7 @@ set -e
 
 _tool _ufw
 
+echo y | ufw reset
+echo y | ufw enable
+
 _ufw_add $_SSH_PORT "SSH"

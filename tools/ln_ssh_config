@@ -3,7 +3,7 @@
 # Arguments:
 set -e
 
-_SSH_CONFIG=$(netstat -tunpl | grep 3090)
+_SSH_CONFIG=$(netstat -l | awk '/0:3090/ {print $4}')
 _SSH_CONFIG_PATH=/etc/ssh/sshd_config
 
 if command -v netstat; then
