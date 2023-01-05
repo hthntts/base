@@ -2,15 +2,27 @@
 # Description: REHL Package Manager
 set -e
 
-function _yum {
-    local pkg=$1
-    if ! dpkg -s $pkg >/dev/null 2>&1; then
-        if [ -z "$__yum_updated" ]; then
-            _yum_update
-        fi
-        _run "[yum] Install ${Yellow}$pkg${Normal}" sudo yum install -y $1
+function _yum_available() {
+    if [ $(yum search $1 | grep -o "$1" | uniq | wc -l) = "1" ]; then
+        _msg "[yum] Package is available: ${Yellow}$1${Normal}"
+        PACKAGE_INSTALL="1"
     else
-        _msg "[yum] ${Yellow}$pkg${Normal} is already installed, skipping."
+        _msg "[yum] Package ${Yellow}$1${Normal} is ${Red}NOT${Normal} available for install"
+        exit_with_error
+    fi
+}
+
+function _yum {
+    _yum_available $1
+    if [ "${PACKAGE_INSTALL}" = "1" ]; then
+        if [ "$(rpm -q tmux | awk -F'-' '{print $1}')" = "$1" ]; then
+            _msg "[yum] Package is already installed: ${Yellow}$1${Normal}"
+        else
+            if [ -z "$__yum_updated" ]; then
+                _yum_update
+            fi
+            _run "[yum] Install ${Yellow}$1${Normal}" sudo yum install -y $1
+        fi
     fi
 }
 
