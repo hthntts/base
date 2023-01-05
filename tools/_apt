@@ -2,15 +2,27 @@
 # Description: Debian Package Manager
 set -e
 
-function _apt {
-    local pkg=$1
-    if ! dpkg -s $pkg >/dev/null 2>&1; then
-        if [ -z "$__apt_updated" ]; then
-            _apt_update
-        fi
-        _run "[apt] Install ${Yellow}$pkg${Normal}" sudo apt-get install -y $1
+function _apt_available() {
+    if [ $(apt-cache search $1 | grep -o "$1" | uniq | wc -l) = "1" ]; then
+        _msg "[apt] Package is available: ${Yellow}$1${Normal}"
+        PACKAGE_INSTALL="1"
     else
-        _msg "[apt] ${Yellow}$pkg${Normal} is already installed, skipping."
+        _msg "[apt] Package ${Yellow}$1${Normal} is ${Red}NOT${Normal} available for install"
+        exit_with_error
+    fi
+}
+
+function _apt {
+    _apt_available $1
+    if [ "${PACKAGE_INSTALL}" = "1" ]; then
+        if [ "$(dpkg-query -l $1 | tail -n1 | cut -c1-2)" = "ii" ]; then
+            _msg "[apt] Package is already installed: ${Yellow}$1${Normal}"
+        else
+            if [ -z "$__apt_updated" ]; then
+                _apt_update
+            fi
+            _run "[apt] Install ${Yellow}$1${Normal}" sudo apt-get install -y $1
+        fi
     fi
 }
 
