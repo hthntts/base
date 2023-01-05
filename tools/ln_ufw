@@ -5,6 +5,12 @@ set -e
 
 _tool _ufw
 
+_SSH_PORT=$(awk '/^Port/ {print $2}' /etc/ssh/sshd_config)
+
+if [ -z ${_SSH_PORT} ]; then
+    _SSH_PORT=22
+fi
+
 echo y | ufw reset
 echo y | ufw enable
 

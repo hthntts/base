@@ -2,10 +2,6 @@
 # Description: Linux UFW (Firewall)
 set -e
 
-if [ -z ${_SSH_PORT} ]; then
-    _SSH_PORT=22
-fi
-
 UFW_IPV4='to 0.0.0.0/0'
 
 if command -v csf; then

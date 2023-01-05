@@ -167,9 +167,7 @@ case $_PLATFORM in
         _DISTRO_BASE=$(awk -F '=' '/^ID_LIKE=/ {print tolower($2)}' /etc/[A-Za-z]*[_-][rv]e[lr]* | tr -d '"')
         _DISTRO_KERNEL=$(uname -srm | awk '{ $1="";print $2,$3}')
         ;;
-    *)
-        _SSH_PORT=$(awk '/^Port/ {print $2}' /etc/ssh/sshd_config)
-        ;;
+    *) ;;
 esac
 
 if [ "${#SETUP[@]}" -eq 0 ]; then
