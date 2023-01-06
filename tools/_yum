@@ -15,7 +15,7 @@ function _yum_available() {
 function _yum {
     _yum_available $1
     if [ "${PACKAGE_INSTALL}" = "1" ]; then
-        if [ "$(rpm -q tmux | awk -F'-' '{print $1}')" = "$1" ]; then
+        if [ "$(rpm -q $1 | awk -F'-' '{print $1}')" = "$1" ]; then
             _msg "[yum] Package is already installed: ${Yellow}$1${Normal}"
         else
             if [ -z "$__yum_updated" ]; then
