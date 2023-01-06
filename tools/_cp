@@ -9,23 +9,23 @@ function _domain {
     account=$(grep -E ^$1: /etc/userdomains | sed 's/://g' | awk '{print $2}')
     # account=$(/scripts/whoowns $1)
     if [ -z $account ]; then
-        _msg "[domain] ${Yellow}DOMAIN${Normal} ${Blue}-->${Normal} ${Red}does not exist${Normal}."
+        _msg "[domain] ${Yellow}DOMAIN${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}."
         exit_with_error
     else
-        _msg "[domain] ${Yellow}$1${Normal} ${Blue}-->${Normal} ${Green}exist${Normal}."
+        _msg "[domain] ${Yellow}$1${Normal} ${Blue}-->${Normal} ${Green}OK${Normal}."
     fi
 }
 
 function _mkdir {
     if [ -e $1 ]; then
-        _msg "[mkdir] ${Yellow}$1${Normal} ${Blue}-->${Normal} ${Green}exist${Normal}."
+        _msg "[mkdir] ${Yellow}$1${Normal} ${Blue}-->${Normal} ${Green}OK${Normal}."
     else
         _run "[mkdir] Create Directory ${Yellow}$1${Normal}" mkdir -p $1
     fi
 }
 
 function _restart {
-    _run "[service] Restart ${Yellow}$1${Normal}" /scripts/restartsrv_$1
+    _run "[service] cPanel restart service ${Yellow}$1${Normal}" /scripts/restartsrv_$1
 }
 
 function _mount {
