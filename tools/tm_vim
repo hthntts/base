@@ -82,9 +82,11 @@ local NAME=".vimrc"
 local FILE=${HOME}/${NAME}
 
 if [ -f ${FILE} ]; then
-  _msg "[$1] File ~/${NAME} found ... ${Yellow}skipping${Normal}"
+  # Found
+  _copy ${FILE}
+  _run "[$1] Add config vim ~/${NAME}" _vim_config ${FILE}
 else
-  _msg "[$1] File ~/${NAME} not found"
+  # Not Found
   _run "[$1] Add config vim ~/${NAME}" _vim_config ${FILE}
 fi
 

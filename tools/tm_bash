@@ -27,16 +27,19 @@ local NAME=".bash_haiht"
 local FILE=${HOME}/${NAME}
 
 if [ -f ${FILE} ]; then
-    _msg "[$1] File ~/${NAME} found ... ${Yellow}skipping${Normal}"
+    # Found
+    _copy ${FILE}
+    _run "[$1] Add config alias ~/${NAME}" _bash_aliases ${FILE}
 else
-    _msg "[$1] File ~/${NAME} not found"
+    # Not Found
     _run "[$1] Add config alias ~/${NAME}" _bash_aliases ${FILE}
 fi
 
 if grep -q "${NAME}" "${HOME}/.bashrc"; then
-    _msg "[$1] ~/${NAME} found on ~/.bashrc ... ${Yellow}skipping${Normal}"
+    # Found
+    _msg "[$1] ~/${NAME} found on ~/.bashrc ... skipping."
 else
-    echo "[$1] ~/${NAME} not found on ~/.bashrc"
-    _run "[$1] Add config bashrc" _bashrc_config ${NAME}
+    # Not Found
+    _run "[$1] Add config to ~/.bashrc" _bashrc_config ${NAME}
     RESTART_SHELL=1
 fi
