@@ -16,6 +16,6 @@ cat ${TXT} | while read Email Domain; do
 
     if [ -d "${DIR}" ]; then
         cd ${DIR}
-        _run "[$1] unlink ${Yellow}${Email}${Normal}" unlink $Email
+        _run "[$1] Unlink ${Yellow}${Email}${Normal}" unlink $Email
     fi
 done

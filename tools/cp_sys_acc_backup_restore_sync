@@ -4,7 +4,7 @@
 set -e
 
 _tool _cp
-[[ -z "${SERVER:-}" ]] && _die "${Yellow}SERVER${Normal} ${Blue}-->${Normal} ${Red}does not exist${Normal}." # SERVER
+[[ -z "${SERVER:-}" ]] && _die "${Yellow}SERVER${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}." # SERVER
 local SSH_OPTION='-oStrictHostKeyChecking=no -oCheckHostIP=no'
 
 sync_data() {

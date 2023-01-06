@@ -16,8 +16,8 @@ while read Email Domain; do
 
     if [ -d "${DIR}" ]; then
         cd ${DIR}
-        _run "[$1] unlink ${Yellow}${Email}${Normal}" unlink $Email
+        _run "[$1] Unlink ${Yellow}${Email}${Normal}" unlink $Email
     else
-        _msg "[$1] ${Yellow}${Email}${Normal} ${Red}does not exist${Normal}."
+        _msg "[$1] ${Yellow}${Email}${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}."
     fi
 done <${TXT}

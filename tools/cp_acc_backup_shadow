@@ -9,4 +9,4 @@ local ACCOUNT=${account}
 
 PATH_SHADOW=/home/${ACCOUNT}/etc/${DOMAIN}/shadow
 
-_run "[$1] File ${Yellow}${PATH_SHADOW}.${FDAY}${Normal}" cp ${PATH_SHADOW}{,.${FDAY}}
+_copy ${PATH_SHADOW}

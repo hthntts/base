@@ -13,5 +13,5 @@ if [ -f ${PATH_LIMITS}/daily_notify/${DOMAIN} ]; then
     rm -rf ${PATH_LIMITS}/daily_notify/${DOMAIN}
     rm -rf ${PATH_LIMITS}/daily_notify/${DOMAIN}_send
 else
-    _msg "[$1] File Email Send Limits ${Yellow}${DOMAIN}${Normal} ${Blue}-->${Normal} ${Red}does not exist${Normal}."
+    _msg "[$1] File Email Send Limits ${Yellow}${DOMAIN}${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}."
 fi

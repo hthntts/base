@@ -11,5 +11,5 @@ local PATH_LIMITS=/var/cpanel/email_send_limits
 if [ -f ${PATH_LIMITS}/max_deferfail_${DOMAIN} ]; then
     _run "[$1] Remove Max Deffer Fail ${Yellow}${DOMAIN}${Normal}" rm -rf ${PATH_LIMITS}/max_deferfail_${DOMAIN}
 else
-    _msg "[$1] File Email Send Limits ${Yellow}${DOMAIN}${Normal} ${Blue}-->${Normal} ${Red}does not exist${Normal}."
+    _msg "[$1] File Email Send Limits ${Yellow}${DOMAIN}${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}."
 fi

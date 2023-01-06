@@ -9,18 +9,18 @@ for i in $(/usr/local/cpanel/3rdparty/mailman/bin/list_lists -b); do
 
     # Check directory mailing list
     if [ -d ${MAINMAN_PATH}/$i ]; then
-        _msg "[$1] ${Yellow}$i${normal} --> ${Green}exist${Normal}."
+        _msg "[$1] ${Yellow}$i${normal} --> ${Green}OK${Normal}."
         _run "[$1] remove exist list" rm -rf ${MAINMAN_PATH}/$i/*
     else
-        _msg "[$1] ${Yellow}$i${Normal} --> ${Red}does not exist${Normal}."
+        _msg "[$1] ${Yellow}$i${Normal} --> ${Red}DOES NOT EXIST${Normal}."
     fi
 
     # Check file mailing list MBOX
     if [ -f ${MAINMAN_PATH}/$i'.mbox'/$i'.mbox' ]; then
-        _msg "[$1] mailing list MBOX $i ${Green}exist${Normal}."
+        _msg "[$1] mailing list MBOX $i ${Blue}-->${Normal} ${Green}OK${Normal}."
         _msg "" >${MAINMAN_PATH}/$i'.mbox'/$i'.mbox'
     else
-        _msg "[$1] mailing list MBOX $i ${Red}does not exist${Normal}."
+        _msg "[$1] mailing list MBOX $i ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}."
         _run "[$1] touch" touch ${MAINMAN_PATH}/$i'.mbox'/$i'.mbox'
         _run "[$1] chown -R mailman.mailman" chown -R mailman.mailman ${MAINMAN_PATH}/$i'.mbox'/$i'.mbox'
     fi

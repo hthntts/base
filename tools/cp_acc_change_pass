@@ -11,7 +11,7 @@ local TXT=/tmp/${DOMAIN}-${FDAY}-account-change-pass-all.txt
 
 PATH_SHADOW=/home/${ACCOUNT}/etc/${DOMAIN}/shadow
 
-_run "[$1] Backup File Shadow ${Yellow}${PATH_SHADOW}.${FDAY}${Normal}" cp ${PATH_SHADOW}{,.${FDAY}}
+_copy ${PATH_SHADOW}
 _run "[$1] Create Email Temp ${Yellow}${FDAY}@${DOMAIN}${Normal}" uapi --user=${ACCOUNT} Email add_pop email=${FDAY} password=$PASSWORD quota=0 domain=$DOMAIN skip_update_db=1
 
 LISTS=$(cat /home/${ACCOUNT}/etc/${DOMAIN}/shadow | cut -d':' -f1 | sed '/${FDAY}/d')

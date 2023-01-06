@@ -10,7 +10,7 @@ function _git {
     local repo=$1
     local dest=$2
     if ! test -d "$dest"; then
-        _run "[$1] Clone ${Yellow}$repo${Normal} to ${Yellow}$dest${Normal}" git clone --recursive $1 $2
+        _run "[$1] Clone ${Yellow}$repo${Normal} ${Blue}-->${Normal} ${Yellow}$dest${Normal}" git clone --recursive $1 $2
     else
         _msg "[$1] ${Yellow}$dest${Normal} already installed, skipping."
     fi

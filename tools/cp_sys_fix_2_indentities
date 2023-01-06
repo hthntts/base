@@ -9,6 +9,6 @@ local TXT=/tmp/${HOSTNAME}-${FDAY}-system-fix-2-indentities.txt
 
 ls -1A /home/*/etc/*/*.rcube.db >${TXT}
 while read list; do
-    _run "[$1] Backup ${Yellow}${list}.${FDAY}${normal}" cp $list{,.${FDAY}}
+    _copy ${list}
     _run "[$1] Fix DB ${Yellow}${list}${Normal}" sqlite3 $list 'DELETE FROM identities WHERE identity_id = 2;'
 done <${TXT}

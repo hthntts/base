@@ -15,7 +15,7 @@ BAYES_JOURNAL=/home/${ACCOUNT}/.spamassassin/bayes_journal
 if [ -f ${BAYES_JOURNAL} ]; then
     _run "[$1] Remove ${Yellow}${BAYES_JOURNAL}${Normal}" rm -rf ${BAYES_JOURNAL}
 else
-    _msg "[$1] File ${Yellow}${BAYES_JOURNAL}${Normal} ${Red}does not exist${Normal}."
+    _msg "[$1] File ${Yellow}${BAYES_JOURNAL}${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}."
 fi
 
 ## Check file bayes_seen
@@ -23,7 +23,7 @@ BAYES_SEEN=/home/${ACCOUNT}/.spamassassin/bayes_seen
 if [ -f ${BAYES_SEEN} ]; then
     _run "[$1] Remove ${Yellow}${BAYES_SEEN}${Normal}" rm -rf ${BAYES_SEEN}
 else
-    _msg "[$1] File ${Yellow}${BAYES_SEEN}${Normal} ${Red}does not exist${Normal}."
+    _msg "[$1] File ${Yellow}${BAYES_SEEN}${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}."
 fi
 
 ## Check file bayes_toks
@@ -31,7 +31,7 @@ BAYES_TOKS=/home/${ACCOUNT}/.spamassassin/bayes_toks
 if [ -f ${BAYES_TOKS} ]; then
     _run "[$1] Remove ${Yellow}${BAYES_TOKS}${Normal}" rm -rf ${BAYES_TOKS}
 else
-    _msg "[$1] File ${Yellow}${BAYES_TOKS}${Normal} ${Red}does not exist${Normal}."
+    _msg "[$1] File ${Yellow}${BAYES_TOKS}${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}."
 fi
 
 _restart spamd

@@ -22,9 +22,9 @@ DIR=/home/${ACCOUNT}/mail/${Domain}/${User}
 
 if [ -d "${DIR}" ]; then
     cd ${DIR}
-    _msg "[$1] ${Yellow}${EMAIL}${Normal} ${Blue}-->${Normal} ${Green}exist${Normal}."
+    _msg "[$1] ${Yellow}${EMAIL}${Normal} ${Blue}-->${Normal} ${Green}OK${Normal}."
 else
-    _msg "[$1] Folder Email ${Yellow}${EMAIL}${Normal} does not exist."
+    _msg "[$1] Folder Email ${Yellow}${EMAIL}${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}."
     exit_with_error
 fi
 
