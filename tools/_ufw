@@ -4,12 +4,12 @@ set -e
 
 UFW_IPV4='to 0.0.0.0/0'
 
-if command -v iptables; then
+if command -v iptables >/dev/null 2>&1; then
     _run "[firewall] Service ${Yellow}iptables${Normal} Stop " systemctl stop iptables
     _run "[firewall] Service ${Yellow}iptables${Normal} Disable" systemctl disable iptables
 fi
 
-if command -v firewall-cmd; then
+if command -v firewall-cmd >/dev/null 2>&1; then
     _run "[firewall] Service ${Yellow}firewalld${Normal} Stop" systemctl stop firewalld
     _run "[firewall] Service ${Yellow}firewalld${Normal} Disable" systemctl disable firewalld
 fi
