@@ -34,7 +34,7 @@ function setup_colors {
 
 function exit_with_error {
     local duration=$(echo "$(date +%s.%N) - $RES1" | bc)
-    local execution_time=$(printf "%.4f Seconds <<<" $duration)
+    local execution_time=$(printf "%.4f Seconds" $duration)
     _msg ">>> [${Red}Incomplete Process${Normal}]: $execution_time <<<"
     exit 1
 }
