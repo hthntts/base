@@ -35,7 +35,7 @@ function setup_colors {
 function exit_with_error {
     local duration=$(echo "$(date +%s.%N) - $RES1" | bc)
     local execution_time=$(printf "%.4f Seconds <<<" $duration)
-    _msg ">>> [${Red}Incomplete Process${Normal}]: $execution_time"
+    _msg ">>> [${Red}Incomplete Process${Normal}]: $execution_time <<<"
     exit 1
 }
 
@@ -64,6 +64,66 @@ function _run {
     printf "${Color01}Done${Normal}\n"
 }
 
+function _copy {
+    if [[ -d "$1" ]]; then
+        _run "[file] COPY ${Yellow}$1${Normal} ${Blue}-->${Normal} ${Yellow}$1.${FDAY}${Normal}" cp $1{,.${FDAY}}
+    else
+        _msg "[file] ${Yellow}$1${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}."
+    fi
+
+    if [[ -f "$1" ]]; then
+        _run "[folder] COPY ${Yellow}$1${Normal} ${Blue}-->${Normal} ${Yellow}$1.${FDAY}${Normal}" cp -rf $1{,.${FDAY}}
+    else
+        _msg "[folder] ${Yellow}$1${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}."
+    fi
+}
+
+function _move {
+    if [[ -d "$1" ]]; then
+        _run "[file] MOVE ${Yellow}$1${Normal} ${Blue}-->${Normal} ${Yellow}$1.${FDAY}${Normal}" mv $1{,.${FDAY}}
+    else
+        _msg "[file] ${Yellow}$1${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}."
+    fi
+
+    if [[ -f "$1" ]]; then
+        _run "[folder] MOVE ${Yellow}$1${Normal} ${Blue}-->${Normal} ${Yellow}$1.${FDAY}${Normal}" mv $1{,.${FDAY}}
+    else
+        _msg "[folder] ${Yellow}$1${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}."
+    fi
+}
+
+function _check {
+    if [[ -d "$1" ]]; then
+        _msg "[file] ${Yellow}$1${Normal} ${Blue}-->${Normal} ${Yellow}OK${Normal}"
+    else
+        _msg "[file] ${Yellow}$1${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}."
+        exit_with_error
+    fi
+
+    if [[ -f "$1" ]]; then
+        _msg "[folder] ${Yellow}$1${Normal} ${Blue}-->${Normal} ${Yellow}OK${Normal}"
+    else
+        _msg "[folder] ${Yellow}$1${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}."
+        exit_with_error
+    fi
+}
+
+function _command_exit {
+    if command -v $1 >/dev/null 2>&1; then
+        _msg "[cmd] COMMAND ${Yellow}$1${Normal} ${Blue}-->${Normal} ${Yellow}OK${Normal}"
+        exit_with_error
+    fi
+}
+
+function _command {
+    if command -v $1 >/dev/null 2>&1; then
+        _msg "[cmd] COMMAND ${Yellow}$1${Normal} ${Blue}-->${Normal} ${Yellow}OK${Normal}"
+    else
+        _msg "[cmd] COMMAND ${Yellow}$1${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}."
+        exit_with_error
+    fi
+}
+
 function _tool {
     local tool
     local path
@@ -74,7 +134,7 @@ function _tool {
         tool="$1"
         path="${PATH_TOOL}"
     else
-        # echo -e "-- Tool [${Bold}${Blue}$1${Normal}] ${Red}does not exist${Normal}." >&2
+        # echo -e "-- Tool [${Bold}${Blue}$1${Normal}] ${Red}DOES NOT EXIST${Normal}." >&2
         exit_with_error
     fi
     STACK+=("$1")
