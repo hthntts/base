@@ -66,29 +66,29 @@ function _run {
 
 function _copy {
     if [[ -d "$1" ]]; then
-        _run "[file] COPY ${Yellow}$1${Normal} ${Blue}-->${Normal} ${Yellow}$1.${FDAY}${Normal}" cp $1{,.${FDAY}}
-    else
-        _msg "[file] ${Yellow}$1${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}."
-    fi
-
-    if [[ -f "$1" ]]; then
         _run "[folder] COPY ${Yellow}$1${Normal} ${Blue}-->${Normal} ${Yellow}$1.${FDAY}${Normal}" cp -rf $1{,.${FDAY}}
     else
         _msg "[folder] ${Yellow}$1${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}."
+    fi
+
+    if [[ -f "$1" ]]; then
+        _run "[file] COPY ${Yellow}$1${Normal} ${Blue}-->${Normal} ${Yellow}$1.${FDAY}${Normal}" cp $1{,.${FDAY}}
+    else
+        _msg "[file] ${Yellow}$1${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}."
     fi
 }
 
 function _move {
     if [[ -d "$1" ]]; then
-        _run "[file] MOVE ${Yellow}$1${Normal} ${Blue}-->${Normal} ${Yellow}$1.${FDAY}${Normal}" mv $1{,.${FDAY}}
-    else
-        _msg "[file] ${Yellow}$1${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}."
-    fi
-
-    if [[ -f "$1" ]]; then
         _run "[folder] MOVE ${Yellow}$1${Normal} ${Blue}-->${Normal} ${Yellow}$1.${FDAY}${Normal}" mv $1{,.${FDAY}}
     else
         _msg "[folder] ${Yellow}$1${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}."
+    fi
+
+    if [[ -f "$1" ]]; then
+        _run "[file] MOVE ${Yellow}$1${Normal} ${Blue}-->${Normal} ${Yellow}$1.${FDAY}${Normal}" mv $1{,.${FDAY}}
+    else
+        _msg "[file] ${Yellow}$1${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}."
     fi
 }
 
