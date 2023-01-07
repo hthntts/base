@@ -1,0 +1,74 @@
+#!/bin/bash
+# Description: IceWarp
+set -Ee
+
+IW_CONF=/etc/icewarp/icewarp.conf
+
+if [[ -f "${IW_CONF}" ]]; then
+    _msg "[icewarp] ${Yellow}${IW_CONF}${Normal} ${Blue}-->${Normal} ${Yellow}OK${Normal}"
+    source ${IW_CONF}
+else
+    _msg "[icewarp] ${Yellow}${IW_CONF}${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}."
+    exit_with_error
+fi
+
+IW_TOOL=$IWS_INSTALL_DIR/tool.sh
+
+function _domain {
+    local __domain=$(${IW_TOOL} export domain $1 | tr -d ',' | awk '!/not found/')
+    if [ -z $__domain ]; then
+        _msg "[domain] ${Yellow}DOMAIN${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}."
+        exit_with_error
+    else
+        _msg "[domain] ${Yellow}$1${Normal} ${Blue}-->${Normal} ${Green}OK${Normal}."
+    fi
+}
+
+function _account {
+    local __account=$(${IW_TOOL} export account $1 | tr -d ',' | awk '!/not found/')
+    if [ -z $__account ]; then
+        _msg "[email] ${Yellow}EMAIL${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}."
+        exit_with_error
+    else
+        _msg "[email] ${Yellow}$1${Normal} ${Blue}-->${Normal} ${Green}OK${Normal}."
+    fi
+}
+
+# function _bl_body {
+#     local file=$1
+#     cat >${file} <<EOF
+# Click Here to Verify
+# Archive file attached to email
+# Attached is an important document
+# Please open the attached document
+# Mail tramntn
+# Email của bạn đã bị hạn chế
+# EOF
+# }
+
+# function _bl_from {
+#     local file=$1
+#     cat >${file} <<EOF
+# exintsolutions.com
+# brightpathassociates.com
+# seojinsys.co.kr
+# denitexltd.com
+# epas.it
+# msa.hinet.net
+# EOF
+# }
+
+# function _bl_subject {
+#     local file=$1
+#     cat >${file} <<EOF
+# URGENT!!!
+# inbox is full
+# mailbox is full
+# EOF
+# }
+
+# BL_SPAM=/home/icewarp/config/blacklist_
+
+# _run "[$1] Update Body" _bl_body ${BL_SPAM}body.txt
+# _run "[$1] Update From" _bl_from ${BL_SPAM}from.txt
+# _run "[$1] Update Subject" _bl_subject ${BL_SPAM}subject.txt
