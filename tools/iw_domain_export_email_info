@@ -1,0 +1,13 @@
+#!/bin/bash
+# Description: IceWarp Domain Export Email Info
+# Arguments: --domain=DOMAIN
+set -e
+
+_tool _iw
+_domain ${DOMAIN}
+local TXT=/tmp/${DOMAIN}-${FDAY}-export-email-info.txt
+
+# ${IW_TOOL} export account *@${DOMAIN} U_Password | awk -F, '!/,,/ {print $1" >>> "$2| "sort -u"}'
+${IW_TOOL} export account *@${DOMAIN} U_Type U_AccountDisabled U_Alias U_Password U_Name U_ForwardTo U_MailIn U_MailOut | awk -F, 'BEGIN { OFS=","; print "EMAIL", "TYPE", "STATUS", "ALIAS", "PASSWORD", "NAME", "FORWARD_TO", "COPY_IN", "COPY_OUT" } /[A-Za-z],0,/ {print $0| "sort -u"}' >${TXT}
+cat ${TXT}
+_msg "[$1] ${Yellow}$TXT${Normal} ${Blue}-->${Normal} ${Green}Done${Normal}"
