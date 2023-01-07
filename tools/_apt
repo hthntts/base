@@ -1,6 +1,6 @@
 #!/bin/bash
 # Description: Debian Package Manager
-set -e
+set -Ee
 
 function _apt_available() {
     if [ $(apt-cache search $1 | grep -o "$1" | uniq | wc -l) = "1" ]; then
