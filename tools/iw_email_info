@@ -1,0 +1,12 @@
+#!/bin/bash
+# Description: IceWarp Email Info
+# Arguments: --email=EMAIL
+set -e
+
+_tool _iw
+_account ${EMAIL}
+local TXT=/tmp/${EMAIL}-${FDAY}-email-info.txt
+
+${IW_TOOL} display account *@${DOMAIN} U_Type U_AccountDisabled U_Alias U_Password U_Name U_ForwardTo U_MailIn U_MailOut >${TXT}
+cat ${TXT}
+_msg "[$1] ${Yellow}$TXT${Normal} ${Blue}-->${Normal} ${Green}Done${Normal}"
