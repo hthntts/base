@@ -1,5 +1,5 @@
 #!/bin/bash
-# Description: IceWarp Domain Export Email Info
+# Description: IceWarp Account Export Email Info
 # Arguments: --domain=DOMAIN
 set -e
 

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Description: IceWarp Domain Create
+# Description: IceWarp Account Create
 # Arguments: --domain=DOMAIN
 set -e
 
