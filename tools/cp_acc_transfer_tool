@@ -7,7 +7,7 @@ _tool _cp
 _domain ${DOMAIN}
 local ACCOUNT=${account}
 
-[[ -z "${IP_TRANSFER:-}" ]] && _die "${Yellow}IP_TRANSFER${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}." # IP_TRANSFER
+[[ -z "${IP_TRANSFER:-}" ]] && _die "[$1] ${Yellow}IP_TRANSFER${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}." # IP_TRANSFER
 
 _msg "[$1] Create Remote Root User Transfer Session (${Yellow}$IP_TRANSFER${Normal})"
 local ID_SESSION=$(whmapi1 create_remote_root_transfer_session remote_server_type=cpanel host=$IP_TRANSFER port=1797 user=root sshkey_name=id_rsa transfer_threads=1 restore_threads=1 unrestricted_restore=1 copy_reseller_privs=0 compressed=0 unencrypted=0 low_priority=0 | grep transfer_session_id | sed 's/://g' | awk '{print $IP_TRANSFER}')

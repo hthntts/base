@@ -10,7 +10,7 @@ local ACCOUNT=${account}
 PATH_SHADOW=/home/${ACCOUNT}/etc/${DOMAIN}/shadow
 PATH_SHADOW_BK=/home/${ACCOUNT}/etc/${DOMAIN}/${BK_SHADOW}
 
-[[ -z "${BK_SHADOW:-}" ]] && _die "${Yellow}BK_SHADOW${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}."
+[[ -z "${BK_SHADOW:-}" ]] && _die "[$1] ${Yellow}BK_SHADOW${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}."
 
 _copy ${PATH_SHADOW}
 _run "[$1] CAT ${Yellow}${PATH_SHADOW_BK}${Normal} ${Blue}-->${Normal} ${Yellow}${PATH_SHADOW}${Normal}" cat $PATH_SHADOW_BK >${PATH_SHADOW}

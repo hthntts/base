@@ -8,10 +8,10 @@ _tool _cp
 local PATH_CPANEL=/usr/local/cpanel/base/unprotected/cpanel
 local PATH_GIT=https://raw.githubusercontent.com/longmikel/cPanel/master/Brand
 
-[[ -z "${IP_OLD:-}" ]] && _die "${Yellow}IP_OLD${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}." # IP Old
-[[ -z "${IP_NEW:-}" ]] && _die "${Yellow}IP_NEW${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}." # IP New
-[[ -z "${HN_OLD:-}" ]] && _die "${Yellow}HN_OLD${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}." # Hostname Old
-[[ -z "${HN_NEW:-}" ]] && _die "${Yellow}HN_NEW${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}." # Hostname New
+[[ -z "${IP_OLD:-}" ]] && _die "[$1] ${Yellow}IP_OLD${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}." # IP Old
+[[ -z "${IP_NEW:-}" ]] && _die "[$1] ${Yellow}IP_NEW${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}." # IP New
+[[ -z "${HN_OLD:-}" ]] && _die "[$1] ${Yellow}HN_OLD${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}." # Hostname Old
+[[ -z "${HN_NEW:-}" ]] && _die "[$1] ${Yellow}HN_NEW${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}." # Hostname New
 
 _run "[$1] Config hostname." hostnamectl set-hostname ${HN_NEW}
 _run "[$1] Config IP in file hosts." sed -i "s|${IP_OLD}|${IP_NEW}|g" /etc/hosts
