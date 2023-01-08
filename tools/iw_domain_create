@@ -1,0 +1,22 @@
+#!/bin/bash
+# Description: IceWarp Domain Create
+# Arguments: --domain=DOMAIN
+set -e
+
+_tool _iw
+
+[[ -z "${DOMAIN:-}" ]] && _die "[$1] ${Yellow}DOMAIN${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}."
+
+local __domain=$(${IW_TOOL} export domain $DOMAIN | tr -d ',' | awk '!/not found/')
+if [ -z $__domain ]; then
+    _msg "[$1] ${Yellow}DOMAIN${Normal} ${Blue}-->${Normal} ${Yellow}OK${Normal}."
+    PS3="[$1] Enter a plan: "
+    select plan in "${PACKAGES[@]}"; do
+        _msg "[$1] Selected plan: ${Yellow}$plan${Normal}"
+        _run "[$1] Create domain: ${Yellow}$DOMAIN${Normal}" ${IW_TOOL} -m Email${plan} create domain $DOMAIN
+        break
+    done
+else
+    _msg "[$1] ${Yellow}$DOMAIN${Normal} is already used, skipping."
+    exit_with_error
+fi

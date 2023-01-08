@@ -13,6 +13,7 @@ else
 fi
 
 IW_TOOL=$IWS_INSTALL_DIR/tool.sh
+PACKAGES=("Personal" "Tiny" "Small" "Medium" "Big" "Super" "Master" "Server")
 
 function _domain {
     local __domain=$(${IW_TOOL} export domain $1 | tr -d ',' | awk '!/not found/')
