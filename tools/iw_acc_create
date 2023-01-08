@@ -17,14 +17,14 @@ if [ -z $__domain ]; then
         _run "[$1] Create domain: ${Yellow}$DOMAIN${Normal}" ${IW_TOOL} -m Email${plan} create domain $DOMAIN
         _run "[$1] Create email admin: ${Yellow}admin@$DOMAIN${Normal}" ${IW_TOOL} create account admin@$DOMAIN U_Password $PASSWORD U_DomainAdmin 1 U_Name "Admin ($DOMAIN)"
         echo "" >${TXT}
-        echo "- Thông tin email domain: $DOMAIN ($plan)" >${TXT}
-        echo "WebAdmin: https://mail.$DOMAIN/admin/" >${TXT}
-        echo "WebMail: https://mail.$DOMAIN/webmail/" >${TXT}
-        echo "User: admin@$DOMAIN" >${TXT}
-        echo "Password: $PASSWORD" >${TXT}
-        echo "- Vui lòng đổi mật khẩu sau lần đăng nhập đầu tiên (Options > Account > Change password)" >${TXT}
-        echo "- Lưu ý: mật khẩu không được trùng với tên email, tối thiểu 6 ký tự (bao gồm chữ và số)" >${TXT}
-        echo "" >${TXT}
+        echo "- Thông tin email domain: $DOMAIN ($plan)" >>${TXT}
+        echo "WebAdmin: https://mail.$DOMAIN/admin/" >>${TXT}
+        echo "WebMail: https://mail.$DOMAIN/webmail/" >>${TXT}
+        echo "User: admin@$DOMAIN" >>${TXT}
+        echo "Password: $PASSWORD" >>${TXT}
+        echo "- Vui lòng đổi mật khẩu sau lần đăng nhập đầu tiên (Options > Account > Change password)" >>${TXT}
+        echo "- Lưu ý: mật khẩu không được trùng với tên email, tối thiểu 6 ký tự (bao gồm chữ và số)" >>${TXT}
+        echo "" >>${TXT}
         _msg "[$1] Info ${Yellow}$TXT${Normal}"
         cat ${TXT}
         break
