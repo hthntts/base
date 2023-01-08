@@ -6,6 +6,7 @@ function _tmux_config {
     local file=$1
     cat >${file} <<EOF
 set-option -g default-terminal "xterm-256color"
+set -g mode-mouse on
 EOF
 }
 
