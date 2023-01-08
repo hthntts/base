@@ -2,6 +2,7 @@
 # Description: IceWarp
 set -Ee
 
+PASSWORD=$(date +%s | sha256sum | base64 | head -c 18)
 IW_CONF=/etc/icewarp/icewarp.conf
 
 if [[ -f "${IW_CONF}" ]]; then

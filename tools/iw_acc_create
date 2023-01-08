@@ -14,6 +14,14 @@ if [ -z $__domain ]; then
     select plan in "${PACKAGES[@]}"; do
         _msg "[$1] Selected plan: ${Yellow}$plan${Normal}"
         _run "[$1] Create domain: ${Yellow}$DOMAIN${Normal}" ${IW_TOOL} -m Email${plan} create domain $DOMAIN
+        _run "[$1] Create email admin: ${Yellow}admin@$DOMAIN${Normal}" ${IW_TOOL} create account admin@$DOMAIN U_Password $PASSWORD U_DomainAdmin 1 U_Name "Admin ($DOMAIN)"
+        echo "\n- Thông tin email domain: $DOMAIN ($plan)"
+        echo "WebAdmin: https://mail.$DOMAIN/admin/"
+        echo "WebMail: https://mail.$DOMAIN/webmail/"
+        echo "User: admin@$DOMAIN"
+        echo "Password: $PASSWORD\n"
+        echo "- Vui lòng đổi mật khẩu sau lần đăng nhập đầu tiên (Options > Account > Change password)"
+        echo "- Lưu ý: mật khẩu không được trùng với tên email, tối thiểu 6 ký tự (bao gồm chữ và số)"
         break
     done
 else
