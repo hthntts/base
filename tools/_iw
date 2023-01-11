@@ -26,6 +26,16 @@ function _domain {
     fi
 }
 
+function _domain_check {
+    local __domain=$(${IW_TOOL} export domain $1 | tr -d ',' | awk '!/not found/')
+    if [ -z $__domain ]; then
+        _msg "[domain] ${Yellow}DOMAIN${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}."
+    else
+        _msg "[domain] ${Yellow}$1${Normal} is already used, skipping."
+        exit_with_error
+    fi
+}
+
 function _account {
     local __account=$(${IW_TOOL} export account $1 | tr -d ',' | awk '!/not found/')
     if [ -z $__account ]; then
@@ -33,6 +43,16 @@ function _account {
         exit_with_error
     else
         _msg "[email] ${Yellow}$1${Normal} ${Blue}-->${Normal} ${Green}OK${Normal}."
+    fi
+}
+
+function _account_check {
+    local __account=$(${IW_TOOL} export account $1 | tr -d ',' | awk '!/not found/')
+    if [ -z $__account ]; then
+        _msg "[email] ${Yellow}EMAIL${Normal} ${Blue}-->${Normal} ${Red}DOES NOT EXIST${Normal}."
+    else
+        _msg "[email] ${Yellow}$1${Normal} is already used, skipping."
+        exit_with_error
     fi
 }
 

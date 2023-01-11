@@ -1,0 +1,20 @@
+#!/bin/bash
+# Description: IceWarp Email Create
+# Arguments: --email=EMAIL
+set -e
+
+_tool _iw
+_account_check ${EMAIL}
+local TXT=/tmp/${EMAIL}-${FDAY}-email-create.txt
+
+_run "[$1] Create email: ${Yellow}$EMAIL${Normal}" ${IW_TOOL} create account $EMAIL U_Name $EMAIL U_Password $PASSWORD
+echo "" >${TXT}
+echo "- Thông tin email: $EMAIL" >>${TXT}
+echo "WebMail: https://mail.$(echo $EMAIL | awk -F@ '{print $2}')/webmail/" >>${TXT}
+echo "User: $EMAIL" >>${TXT}
+echo "Password: $PASSWORD" >>${TXT}
+echo "- Vui lòng đổi mật khẩu sau lần đăng nhập đầu tiên (Options > Account > Change password)" >>${TXT}
+echo "- Lưu ý: mật khẩu không được trùng với tên email, tối thiểu 6 ký tự (bao gồm chữ và số)" >>${TXT}
+echo "" >>${TXT}
+_msg "[$1] Info ${Yellow}$TXT${Normal}"
+cat ${TXT}
