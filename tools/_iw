@@ -60,11 +60,6 @@ function _account_check {
 #     local file=$1
 #     cat >${file} <<EOF
 # Click Here to Verify
-# Archive file attached to email
-# Attached is an important document
-# Please open the attached document
-# Mail tramntn
-# Email của bạn đã bị hạn chế
 # EOF
 # }
 
