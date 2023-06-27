@@ -4,15 +4,11 @@ set -Ee
 
 UFW_IPV4='to 0.0.0.0/0'
 
-if command -v iptables >/dev/null 2>&1; then
-    _run "[firewall] Service ${Yellow}iptables${Normal} Stop" systemctl stop iptables
-    _run "[firewall] Service ${Yellow}iptables${Normal} Disable" systemctl disable iptables
-fi
+systemctl is-active --quiet iptables && _run "[firewall] Service ${Yellow}iptables${Normal} Stop" systemctl stop iptables
+systemctl is-active --quiet iptables && _run "[firewall] Service ${Yellow}iptables${Normal} Disable" systemctl disable iptables
 
-if command -v firewall-cmd >/dev/null 2>&1; then
-    _run "[firewall] Service ${Yellow}firewalld${Normal} Stop" systemctl stop firewalld
-    _run "[firewall] Service ${Yellow}firewalld${Normal} Disable" systemctl disable firewalld
-fi
+systemctl is-active --quiet firewalld && _run "[firewall] Service ${Yellow}firewalld${Normal} Stop" systemctl stop firewalld
+systemctl is-active --quiet firewalld && _run "[firewall] Service ${Yellow}firewalld${Normal} Disable" systemctl disable firewalld
 
 _command_exit csf
 _command_exit imunify360-agent
